@@ -1,38 +1,123 @@
-.App {
-  text-align: center;
+/* General Styles */
+.indented {
+    margin: 5px;;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Title Styles */
+#title {
+    margin: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Navigation Styles */
+#navbar {
+    display: flex;
+    flex-direction: row;
+    background-color: powderblue;
+
+    border: black solid 5px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#navbar > * {
+    flex: 1;
+    text-align: center;
+    font-weight: bold;
 }
 
-.App-link {
-  color: #61dafb;
+@media (max-width: 700px) {
+    #navbar {
+        flex-direction: column;
+    }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Petbox Styles */
+#petbox {
+    border: black solid 5px;
+    margin: 5px;
+    width: 480px;
+}
+
+#petbox > * {
+    text-align: center;
+}
+
+#pet_name {
+    font-weight: bold;
+}
+
+#pet_img {
+    width: 100%;
+
+    border-top: black solid 5px;
+    border-bottom: black solid 5px;
+}
+
+#stats_list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Inventory Styles */
+#inventory {
+    display: flex;
+    flex-direction: row;
+
+    border: black solid 5px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.inventory_item {
+    padding: 10px;
+    margin: 20px;
+    background-color: #f5f5dc;
+
+    border: black solid 2px;
+    border-radius: 10px;
+}
+
+.inventory_item:hover {
+    background-color: #cdcdaf;
+}
+
+/* Shops List Styles */
+#shops_list {
+    border: black solid 5px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+#shops_list > p {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.shops_category > * {
+    line-height: 40px;
+}
+
+.shops_category > dt {
+    font-size: 1.5em;
+}
+
+/* Games List Styles */
+#games_list {
+    border: black solid 5px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+#games_list > dt {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+#games_list > * {
+    line-height: 40px;
 }
