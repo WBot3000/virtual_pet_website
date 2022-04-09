@@ -130,3 +130,8 @@
     background-color: #f1c8c8;
     border: 5px;
 }
+
+#sample_shape {
+    width: 100px;
+    height: 100px;
+}

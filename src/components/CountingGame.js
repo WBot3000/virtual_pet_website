@@ -62,7 +62,7 @@ function CountingGame() {
 
     return <>
         <h2>Counting Game</h2>
-        <p>Count all the {`${colorToFind} ${shapeToFind}s`}</p>
+        <p>Count all the {`${colorToFind} ${shapeToFind}s`} <img src={require(`../assets/counting_pics/${shapeToFind}_${colorToFind}.png`)} id="sample_shape"/></p>
         <CountingGameScreen objects={objArray}/>
         {responseGiven && <p>{responseMessage()}</p>}
         {responseCorrect && <p>You scored {score}!</p>}
