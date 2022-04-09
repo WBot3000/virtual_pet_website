@@ -10,7 +10,10 @@ function CountingGame() {
     const [correctAnswer, setCorrectAnswer] = useState(0);
     const [responseGiven, setResponseGiven] = useState(false);
     const [responseCorrect, setResponseCorrect] = useState(false);
-    const [startTime, setStartTime] = useState(new Date());
+
+    const [startTime, setStartTime] = useState(Date.now());
+    const [penaltyCount, setPenaltyCount] = useState(0);
+    const [score, setScore] = useState(0);
 
     const shapes = ["circle", "triangle", "square"];
     const colors = ["red", "blue", "yellow"];
@@ -48,6 +51,12 @@ function CountingGame() {
         setResponseGiven(true);
         if(currentAnswer == correctAnswer) {
             setResponseCorrect(true);
+            let secondsElapsed = Math.floor((Date.now() - startTime) / 1000);
+            let scoreCalculation = Math.max(1000 - secondsElapsed - (penaltyCount * 100), 0);
+            setScore(scoreCalculation);
+        }
+        else {
+            setPenaltyCount(penaltyCount + 1);
         }
     }
 
@@ -56,6 +65,7 @@ function CountingGame() {
         <p>Count all the {`${colorToFind} ${shapeToFind}s`}</p>
         <CountingGameScreen objects={objArray}/>
         {responseGiven && <p>{responseMessage()}</p>}
+        {responseCorrect && <p>You scored {score}!</p>}
         {!responseCorrect &&
             <form onSubmit={handleSubmit}>
                 <label>
