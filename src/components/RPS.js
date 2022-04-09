@@ -5,7 +5,9 @@ function RPS(props) {
     // const [maxWager, setMaxWager] = useState(0);
     // const [wager, setWager] = useState(0);
     const [playerSelect, setPlayerSelect] = useState("none_selected");
-    const [cpuSelect, setCPUSelect] = useState("");
+    const [cpuSelect, setCPUSelect] = useState("none_selected");
+    const [alreadyPlayed, setAlreadyPlayed] = useState(false);
+    const [resultMessage, setResultMessage] = useState("You guys tied!");
 
 
     function handleSubmit(e) {
@@ -16,16 +18,18 @@ function RPS(props) {
         else {
             let rpsArr = ["rock", "paper", "scissors"];
             let cpuChoice = rpsArr[Math.floor(Math.random() * rpsArr.length)];
-            console.log(`You chose ${playerSelect}. CPU chose ${cpuChoice}`);
+            setCPUSelect(cpuChoice);
+            //console.log(`You chose ${playerSelect}. CPU chose ${cpuSelect}`);
             if(playerSelect == cpuChoice) {
-                console.log("You guys tied!");
+                setResultMessage("You guys tied!");
             }
             else if((playerSelect == "rock" && cpuChoice == "scissors") || (playerSelect == "paper" && cpuChoice == "rock") || (playerSelect == "scissors" && cpuChoice == "paper")) {
-                console.log("You won!");
+                setResultMessage("You won!");
             }
             else {
-                console.log("You lost...");
+                setResultMessage("You lost...");
             }
+            setAlreadyPlayed(true);
         }
     }
     // if(!gameStart) {
@@ -41,23 +45,38 @@ function RPS(props) {
     // }
 
     return <>
+        <h2>Rock, Paper, Scissors</h2>
         <p>Select Rock, Paper, or Scissors</p>
-        {playerSelect && <img src={require(`../assets/rps_pics/${playerSelect}.png`)} alt={`${playerSelect}`}/>}
-        <form onSubmit={handleSubmit}>
-            <label>
-                Choose Here:
-                <select value={playerSelect} onChange={e => setPlayerSelect(e.target.value)}>
-                    <option value="none_selected">Pick One!</option>
-                    <option value="rock">Rock</option>
-                    <option value="paper">Paper</option>
-                    <option value="scissors">Scissors</option>
-                </select>
-            </label>
-            <label>
-                Go!
-                <input type="submit" value="Rock Paper Scissors And..."/>
-            </label>
-        </form>
+        <p>Your Choice:</p>
+        <img src={require(`../assets/rps_pics/${playerSelect}.png`)} alt={`Your selection, which is ${playerSelect}`}/>
+        <p>Opponent's Choice:</p>
+        <img src={require(`../assets/rps_pics/${cpuSelect}.png`)} alt={`The opponent's selection, which is ${cpuSelect}`}/>
+        {!alreadyPlayed &&
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Choose Here:
+                    <br/>
+                    <select value={playerSelect} onChange={e => setPlayerSelect(e.target.value)}>
+                        <option value="none_selected">Pick One!</option>
+                        <option value="rock">Rock</option>
+                        <option value="paper">Paper</option>
+                        <option value="scissors">Scissors</option>
+                    </select>
+                </label>
+                <br/>
+                <label>
+                    Go!
+                    <br/>
+                    <input type="submit" value="Rock Paper Scissors And..."/>
+                </label>
+            </form>
+        }
+        {alreadyPlayed &&
+            <>
+                <p>{`You chose ${playerSelect}. CPU chose ${cpuSelect}`}</p>
+                <p>{resultMessage}</p>
+            </>
+        }
     </>
 }
 
