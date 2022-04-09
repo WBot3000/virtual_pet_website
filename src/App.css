@@ -64,6 +64,7 @@
 #menu {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 
     border: black solid 5px;
     border-radius: 10px;
@@ -122,4 +123,10 @@
     line-height: 40px;
 }
 
-/* RPS (Rock, Paper, Scissors) Styles */
+/* Counting Game Styles */
+#counting_game_screen {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #f1c8c8;
+    border: 5px;
+}

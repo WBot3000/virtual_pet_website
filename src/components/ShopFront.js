@@ -7,7 +7,7 @@ function ShopFront(props) {
 
     useEffect(() => {
         setShopName(props.shopName);
-        let quoteIdx = Math.floor(Math.random(props.shopQuotes.length));
+        let quoteIdx = Math.floor(Math.random() * props.shopQuotes.length);
         setShopQuote(props.shopQuotes[quoteIdx]);
         setShopInv(props.shopInv);
     }, []);
