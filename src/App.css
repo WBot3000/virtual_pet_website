@@ -60,8 +60,8 @@
     margin: 0;
 }
 
-/* Inventory Styles */
-#inventory {
+/* Inventory/Shopfront Styles */
+#menu {
     display: flex;
     flex-direction: row;
 
@@ -71,7 +71,7 @@
     margin: 5px;
 }
 
-.inventory_item {
+.menu_item {
     padding: 10px;
     margin: 20px;
     background-color: #f5f5dc;
@@ -80,7 +80,7 @@
     border-radius: 10px;
 }
 
-.inventory_item:hover {
+.menu_item:hover {
     background-color: #cdcdaf;
 }
 
@@ -121,3 +121,5 @@
 #games_list > * {
     line-height: 40px;
 }
+
+/* RPS (Rock, Paper, Scissors) Styles */

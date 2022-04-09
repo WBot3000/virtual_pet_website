@@ -21,9 +21,9 @@ function Inventory(props) {
     }
     else {
         return (
-            <div id="inventory">
+            <div id="menu">
                 {items.map((item, idx) => {
-                    return <div className="inventory_item" key={item.id}>
+                    return <div className="menu_item" key={item.id}>
                         <InvDisplay itemName={item.name}/>
                         <button onClick={() => consumeItem(idx)}>Use</button>
                     </div>
