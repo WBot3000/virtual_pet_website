@@ -19,7 +19,11 @@ function ShopFront(props) {
         else {
             return <>
                 {shopInv.map(item => {
-                    return <div className="menu_item">{item.name}</div>
+                    return <div className="menu_item">
+                        <img src={require('../assets/inv/placeholder.png')} />
+                        <p>{item.name}</p>
+                        <button>Buy Item</button>
+                    </div>
                 })}
             </>
         }
