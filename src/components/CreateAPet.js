@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CreateAPet(props) {
+function CreateAPet() {
     const [petCreated, setPetCreated] = useState(false);
     
     const [petType, setPetType] = useState("");

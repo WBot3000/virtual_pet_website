@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-function RPS(props) {
+function RPS() {
     // const [gameStart, setGameStart] = useState(false);
     // const [maxWager, setMaxWager] = useState(0);
     // const [wager, setWager] = useState(0);

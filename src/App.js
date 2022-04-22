@@ -3,6 +3,12 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import ComponentCollection from './pages/ComponentCollection';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import CreateAPetPage from './pages/CreateAPetPage';
+import InventoryPage from './pages/InventoryPage';
+import ShopListPage from './pages/ShopListPage';
+import GameListPage from './pages/GameListPage';
+import CountingGamePage from './pages/CountingGamePage';
+import RPSPage from './pages/RPSPage';
 
 function App() {
     return (
@@ -14,6 +20,12 @@ function App() {
                     <Routes>
                         <Route exact path="/" element={<HomePage/>}/>
                         <Route exact path="/login" element={<LoginPage/>}/>
+                        <Route exact path="/createapet" element={<CreateAPetPage/>}/>
+                        <Route exact path="/inventory" element={<InventoryPage/>}/>
+                        <Route exact path="/shops" element={<ShopListPage/>}/>
+                        <Route exact path="/games" element={<GameListPage/>}/>
+                        <Route exact path="/games/counting" element={<CountingGamePage/>}/>
+                        <Route exact path="/games/rps" element={<RPSPage/>}/>
                         <Route exact path="/components" element={<ComponentCollection />}/>
                     </Routes>
                 </Router>
