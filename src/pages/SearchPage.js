@@ -1,13 +1,13 @@
 import Navigation from "../components/Navigation";
 import PetBox from "../components/PetBox";
-import GamesList from "../components/GamesList";
+import Search from "../components/Search";
 
-function GameListPage() {
+function SearchPage() {
     return <>
         <Navigation/>
         <PetBox/>
-        <GamesList/>
+        <Search/>
     </>
 }
 
-export default GameListPage;
+export default SearchPage;

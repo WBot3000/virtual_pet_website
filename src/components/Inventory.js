@@ -1,13 +1,9 @@
 import {useState, useEffect} from 'react';
 import InvDisplay from './InvDisplay';
 
-function Inventory(props) {
+function Inventory() {
 
-    const [items, setItems] = useState([]);
-
-    useEffect(() => {
-        setItems(props.items)
-    }, []);
+    const [items, setItems] = useState([{id: "123", name: "Item1"}, {id: "456", name: "Item2"}, {id:"789", name: "Item3"}, {id:"000", name: "Item4"}, {id:"101", name: "Item5"}]);
 
     function consumeItem(idx) {
         let newInv = items.slice(0, idx).concat(items.slice(idx+1));

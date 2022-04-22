@@ -135,3 +135,26 @@
     width: 100px;
     height: 100px;
 }
+
+/* Search Styles */
+.search_results {
+    margin-left: 5px;
+}
+
+.search_results_images {
+    width: 400px;
+    height: 400px;
+}
+
+/* Pet Page Styles */
+.pet_page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pet_page_images {
+    width: 450px;
+    height: 450px;
+    border: 5px black solid;
+}
