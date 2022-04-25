@@ -9,6 +9,7 @@ import ShopListPage from './pages/ShopListPage';
 import GameListPage from './pages/GameListPage';
 import CountingGamePage from './pages/CountingGamePage';
 import RPSPage from './pages/RPSPage';
+import RiddleMeThisPage from './pages/RiddleMeThisPage';
 import SearchPage from './pages/SearchPage';
 import PetPage from "./pages/PetPage";
 
@@ -28,6 +29,7 @@ function App() {
                         <Route exact path="/games" element={<GameListPage/>}/>
                         <Route exact path="/games/counting" element={<CountingGamePage/>}/>
                         <Route exact path="/games/rps" element={<RPSPage/>}/>
+                        <Route exact path="/games/riddlemethis" element={<RiddleMeThisPage/>}/>
                         <Route exact path="/search" element={<SearchPage/>}/>
                         <Route exact path="/petpage/0" element={<PetPage/>}/>
                         <Route exact path="/components" element={<ComponentCollection />}/>

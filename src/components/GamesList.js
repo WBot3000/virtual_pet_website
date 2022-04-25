@@ -9,7 +9,7 @@ function GamesList() { //TODO: Add links to the individual game pages
                 <dd>Can you count? Well, then this game is for you!</dd>
                 <dt><Link to="/games/rps">Rock, Paper, Scissors</Link></dt>
                 <dd>A classic game. They should add dragons.</dd>
-                <dt>Riddle Me This</dt>
+                <dt><Link to="/games/riddlemethis">Riddle Me This</Link></dt>
                 <dd>For those who like to think.</dd>
             </dl>
         </div>
