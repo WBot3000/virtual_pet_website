@@ -3,40 +3,34 @@ import Login from '../components/Login';
 import Logout from '../components/Logout';
 import { Navigate } from 'react-router-dom';
 import firebase from '../Firebase';
+import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 function LoginPage() {
     const [loading, setLoading] = useState(true);
-    const [loggedin, setLoggedin] = useState(false);
-    if(loading){
-        getAuth().onAuthStateChanged(function(user) {
-            setLoading(false);
-            if (user) {
-                setLoggedin(true);
-            } else {
-                // No user is signed in.
-                //TODO: return false. returning true for now to avoid having to sign in during development
-                setLoggedin(true);
-            }
-        });
+    const [userIsAuthenticated, setAuthenticated] = useState(false);
+    const onFinishedLoading = (loading) => {
+        setLoading(loading);
+    };
+
+    const onSetAuthenticated = (authenticated) => {
+        setAuthenticated(authenticated)
     }
 
-    if(loading)
-        return <div>
-            <h2>Loading...</h2>
-        </div>
-    else if(!loggedin){
+    if (loading){
+        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
+    }
+
+    else if (userIsAuthenticated){
+        return <Navigate to="/shops"></Navigate>
+    }else
+    {
         return <div>
             <h2>Login to Virtual Pet</h2>
-            <Login/>
-            <Logout/>
+            <Login onFinishedAuthentication={onSetAuthenticated}></Login>
         </div>
     }
-    else {
-        return <div>
-          <Navigate to="/shops" />
-        </div>
-    }
+
 }
 
 export default LoginPage;
