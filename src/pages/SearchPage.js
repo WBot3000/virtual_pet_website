@@ -15,7 +15,7 @@ function SearchPage() {
     const onSetAuthenticated = (authenticated) => {
         setAuthenticated(authenticated)
     }
-
+    
     if (loading){
         return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
     }

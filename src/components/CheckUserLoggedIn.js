@@ -8,15 +8,13 @@ const CheckUserLoggedIn = (props) => {
     const [loggedin, setLoggedin] = useState(false);
     if(loading){
         getAuth().onAuthStateChanged(function(user) {
-            //setLoading(false);
-            //props.onChange(false);
             if (user) {
                 console.log(user);
                 props.onFinishedAuthentication(true);
                 props.onChange(false);
+                props.onFinishedUser(user);
             } else {
                 // No user is signed in.
-                //TODO: return false. returning true for now to avoid having to sign in during development
                 props.onFinishedAuthentication(false);
                 props.onChange(false);
             }
