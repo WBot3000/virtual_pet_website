@@ -9,19 +9,20 @@ import user from "../data_access_layer/user";
 function ShopListPage() {
     const [loading, setLoading] = useState(true);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
+    const [currentUserID, setCurrentUserID] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
-            if(!loading && currentUser){
-                const result = await user.GetUser(currentUser.uid);
-                console.log(result);
-                setCurrentUser(result);
+            console.log(currentUserID)
+            if(currentUserID){
+                const {data} = await user.GetUser(currentUserID);
+                setCurrentUser(data);
             }            
         };
     
         fetchData();
-    }, [loading]);
+    }, [currentUserID]);
 
     const onFinishedLoading = (loading) => {
         setLoading(loading);
@@ -29,12 +30,12 @@ function ShopListPage() {
     const onSetAuthenticated = (authenticated) => {
         setAuthenticated(authenticated);
     }
-    const onSetCurrentUser = (user) => {
-        setCurrentUser(user);
+    const onSetCurrentUserID = (user) => {
+        setCurrentUserID(user.uid);
     }
 
     if (loading){
-        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated} onFinishedUser={onSetCurrentUser}></CheckUserLoggedIn>
+        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated} onFinishedUser={onSetCurrentUserID}></CheckUserLoggedIn>
     }
 
     else if (!userIsAuthenticated){
