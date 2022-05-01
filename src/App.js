@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import ComponentCollection from './pages/ComponentCollection';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import LogoutPage from './pages/LogoutPage';
 import CreateAPetPage from './pages/CreateAPetPage';
 import InventoryPage from './pages/InventoryPage';
 import ShopListPage from './pages/ShopListPage';
@@ -33,6 +34,7 @@ function App() {
                         <Route path="/search" element={<SearchPage/>}/>
                         <Route path="/petpage/0" element={<PetPage/>}/>
                         <Route path="/components" element={<ComponentCollection />}/>
+                        <Route path="/logout" element={<LogoutPage/>}/>
                     </Routes>
                 </Router>
             </div>

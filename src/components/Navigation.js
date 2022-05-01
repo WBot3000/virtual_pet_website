@@ -11,7 +11,7 @@ function Navigation() {
             <Link to="/games"><p>Games</p></Link>
             <Link to="/search"><p>Search</p></Link>
             <Link to="/petpage/0"><p>Pet Page</p></Link>
-            <Link to="/login"><p>Login</p></Link>
+            <Link to="/logout"><p>Logout</p></Link>
         </nav>
     );
 }

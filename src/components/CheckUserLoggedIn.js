@@ -11,6 +11,7 @@ const CheckUserLoggedIn = (props) => {
             //setLoading(false);
             //props.onChange(false);
             if (user) {
+                console.log(user);
                 props.onFinishedAuthentication(true);
                 props.onChange(false);
             } else {
