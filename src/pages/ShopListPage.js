@@ -1,14 +1,34 @@
 import Navigation from "../components/Navigation";
 import PetBox from "../components/PetBox";
 import ShopsList from "../components/ShopsList";
+import {useState, useContext} from "react";
+import { Navigate } from 'react-router-dom';
+import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 
 function ShopListPage() {
-    
-    return <>
-        <Navigation/>
-        <PetBox/>
-        <ShopsList/>
-    </>
+    const [loading, setLoading] = useState(true);
+    const [userIsAuthenticated, setAuthenticated] = useState(false);
+    const onFinishedLoading = (loading) => {
+        setLoading(loading);
+    };
+    const onSetAuthenticated = (authenticated) => {
+        setAuthenticated(authenticated)
+    }
+
+    if (loading){
+        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
+    }
+
+    else if (!userIsAuthenticated){
+        return <Navigate to="/"></Navigate>
+    }else
+    {
+        return <>
+            <Navigation/>
+            <PetBox/>
+            <ShopsList/>
+        </>
+    }
 }
 
 export default ShopListPage;

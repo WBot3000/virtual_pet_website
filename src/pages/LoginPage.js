@@ -1,10 +1,7 @@
 import {useState, useContext} from "react";
-import Login from '../components/Login';
-import Logout from '../components/Logout';
 import { Navigate } from 'react-router-dom';
-import firebase from '../Firebase';
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import Login from '../components/Login';
 
 function LoginPage() {
     const [loading, setLoading] = useState(true);

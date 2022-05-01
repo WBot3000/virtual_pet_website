@@ -1,16 +1,26 @@
+import {useState, useContext} from "react";
+import { Navigate } from 'react-router-dom';
 import firebase from '../Firebase';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const CheckUserLoggedIn = (props) => {
-    getAuth().onAuthStateChanged(function(user) {
-        props.onChange(false);
-        if (user) {
-            props.onFinishedAuthentication(true);
-        } else {
-            // No user is signed in.
-            props.onFinishedAuthentication(false);
-        }
-    });
+    const [loading, setLoading] = useState(true);
+    const [loggedin, setLoggedin] = useState(false);
+    if(loading){
+        getAuth().onAuthStateChanged(function(user) {
+            //setLoading(false);
+            //props.onChange(false);
+            if (user) {
+                props.onFinishedAuthentication(true);
+                props.onChange(false);
+            } else {
+                // No user is signed in.
+                //TODO: return false. returning true for now to avoid having to sign in during development
+                props.onFinishedAuthentication(false);
+                props.onChange(false);
+            }
+        });
+    }
 
     return <div>
         <h2>Loading...</h2>

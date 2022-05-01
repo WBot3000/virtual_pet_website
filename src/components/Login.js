@@ -6,7 +6,6 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const Login = (props) => {
     const auth = getAuth();
-    console.log(auth)
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
         prompt: "select_account"

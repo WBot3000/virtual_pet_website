@@ -22,17 +22,17 @@ function App() {
                     </header>
                     <Routes>
                         <Route exact path="/" element={<HomePage/>}/>
-                        <Route exact path="/login" element={<LoginPage/>}/>
-                        <Route exact path="/createapet" element={<CreateAPetPage/>}/>
-                        <Route exact path="/inventory" element={<InventoryPage/>}/>
-                        <Route exact path="/shops" element={<ShopListPage/>}/>
-                        <Route exact path="/games" element={<GameListPage/>}/>
-                        <Route exact path="/games/counting" element={<CountingGamePage/>}/>
-                        <Route exact path="/games/rps" element={<RPSPage/>}/>
-                        <Route exact path="/games/riddlemethis" element={<RiddleMeThisPage/>}/>
-                        <Route exact path="/search" element={<SearchPage/>}/>
-                        <Route exact path="/petpage/0" element={<PetPage/>}/>
-                        <Route exact path="/components" element={<ComponentCollection />}/>
+                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route path="/createapet" element={<CreateAPetPage/>}/>
+                        <Route path="/inventory" element={<InventoryPage/>}/>
+                        <Route path="/shops" element={<ShopListPage/>}/>
+                        <Route path="/games" element={<GameListPage/>}/>
+                        <Route path="/games/counting" element={<CountingGamePage/>}/>
+                        <Route path="/games/rps" element={<RPSPage/>}/>
+                        <Route path="/games/riddlemethis" element={<RiddleMeThisPage/>}/>
+                        <Route path="/search" element={<SearchPage/>}/>
+                        <Route path="/petpage/0" element={<PetPage/>}/>
+                        <Route path="/components" element={<ComponentCollection />}/>
                     </Routes>
                 </Router>
             </div>
