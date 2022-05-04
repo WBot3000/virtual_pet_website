@@ -1,0 +1,22 @@
+{
+  "name": "cs-554-project",
+  "version": "1.0.0",
+  "description": "CS 554 Project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Caleb Elliott 10458491",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "bluebird": "^3.4.7",
+    "cors": "^2.8.5",
+    "express": "^4.14.1",
+    "flat": "^2.0.1",
+    "gm": "^1.23.1",
+    "node-redis": "^0.1.7",
+    "redis": "^3.0.2"
+  }
+}
