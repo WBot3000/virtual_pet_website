@@ -20,8 +20,9 @@ const addLayer = (img, newLayer, resultPath) => {
 async function createPetImage(base, layers, resultPath) {
     let image = gm(base);
     for(let layer of layers) {
-        if(layer) { //Add layer if it isn't null/undefined 
-            await addLayer(image, layer, resultPath);
+        if(layer.substring(layer.length-8) != "null.png") { //Add layer if it isn't null 
+            let dirLocation = __dirname.substring(0, __dirname.length-6)
+            await addLayer(image, dirLocation + layer, resultPath);
             image = gm(resultPath);
         }
     }
@@ -65,9 +66,14 @@ router.put('/updateClothing/:userID/:petID', async (request, response) => {
         return response.status(400).json({message: "New pet options not provided"});
     }
     //TODO: Check for pet's existence in the database?
-    const layers = [petObj.shirt, petObj.pants, petObj.shoes, petObj.face, petObj.hat];
+    const layers = [`public/pieces/shirt/${petObj.shirt}.png`, 
+    `public/pieces/pants/${petObj.pants}.png`, 
+    `public/pieces/shoes/${petObj.shoes}.png`, 
+    `public/pieces/face/${petObj.face}.png`, 
+    `public/pieces/hat/${petObj.hat}.png`];
     const petImgPath = `public/petImages/pet${userID}_${petID}.png`;
-    await createPetImage(petObj.species, layers, path.resolve(petImgPath));
+    //let dirLocation = __dirname.substring(0, __dirname.length-5);
+    await createPetImage(path.resolve(`public/pieces/species/${petObj.species}.png`), layers, path.resolve(petImgPath));
     return response.json({message: "Pet successfully updated"});
 });
 
