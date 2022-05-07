@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams, Navigate } from 'react-router-dom';
+import user from "../data_access_layer/user";
 import {
   Card,
   CardActionArea,
@@ -46,16 +47,12 @@ const useStyles = makeStyles({
 });
 const CreateAPet = (props) => {
   const classes = useStyles();
-  const [loading, setLoading] = useState(true);
-  const [pokedata, setData] = useState(undefined);
-  const [buttonClicked, setButtonClick] = useState(true);
-  const [errorOccured, setError] = useState(false);
 
   const buildCard = (datum) => {
     return (
         <Card className={classes.card} variant="outlined">
           <CardHeader className={classes.titleHead}/>
-          <CardMedia component='img' src={`${datum.base64_img}`} />
+          <CardMedia component='img' src={`${datum.petData.base64_img}`} />
   
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="span">
@@ -69,18 +66,18 @@ const CreateAPet = (props) => {
     //disable form's default behavior
     e.preventDefault();
     //get references to form fields.
-    let firstName = document.getElementById('firstName').value;
-    let lastName = document.getElementById('lastName').value;
+    let name = document.getElementById('name').value;
+    let options = [];
+    props.data.petData.custom_items.forEach(e => {
+        if(document.getElementById(e.id).checked){
+            options.push(document.getElementById(e.id).value);
+        }
+      });
+    let user = props.data.currentUserID;
 
-    //provide input checking/validation
-    //then perhaps post form data to an API or your express server end point
+    let payload = {name, options, user};
 
-    let user = {
-      firstName,
-      lastName
-    };
-
-    const { data } = await axios.post('http://localhost:3008/users', user, {
+    const { data } = await axios.post('http://localhost:3001/CreatePet', JSON.stringify(payload), {
       headers: { Accept: 'application/json' }
     });
     console.log(data);
@@ -88,7 +85,7 @@ const CreateAPet = (props) => {
     //setPostData(data);
     
   };
-  let options = props.data.custom_items.map(e => {
+  let options = props.data.petData.custom_items.map(e => {
     return <label for={e.id}> {e.screen_name}
         <input
             type="checkbox"

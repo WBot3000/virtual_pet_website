@@ -10,6 +10,8 @@ function CreateAPetInstancePage() {
     const [petData, setPetData] = useState(null);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
     const [errorOccured, setError] = useState(false);
+    const [currentUserID, setCurrentUserID] = useState(null);
+
     let { id } = useParams();
 
     useEffect(() => {
@@ -34,14 +36,17 @@ function CreateAPetInstancePage() {
     const onSetAuthenticated = (authenticated) => {
         setAuthenticated(authenticated)
     }
+    const onSetCurrentUserID = (user) => {
+        setCurrentUserID(user.uid);
+    }
 
     if (loading){
-        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
+        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated} onFinishedUser={onSetCurrentUserID}></CheckUserLoggedIn>
     }
-    /*else if (!userIsAuthenticated){
+    else if (!userIsAuthenticated){
         return <Navigate to="/"></Navigate>
-    }*/
-    else if (!petData){
+    }
+    else if (!petData || !currentUserID){
         return <div>
             <h2>Loading...</h2>
         </div>
@@ -55,10 +60,11 @@ function CreateAPetInstancePage() {
     }
     else
     {
+        let pageData = {petData, currentUserID}
         return <>
             <Navigation/>
             <h1 style={{textAlign: 'center'}}>Customize Your New Pet!</h1>
-            <CreateAPet data={petData}/>
+            <CreateAPet data={pageData}/>
         </>
     }
 }
