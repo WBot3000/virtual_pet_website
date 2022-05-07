@@ -20,9 +20,9 @@ function CreateAPetPage() {
         return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
     }
 
-    //else if (!userIsAuthenticated){
-        //return <Navigate to="/"></Navigate>
-    //}
+    else if (!userIsAuthenticated){
+        return <Navigate to="/"></Navigate>
+    }
     else
     {
         return <>
