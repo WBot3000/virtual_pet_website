@@ -13,6 +13,11 @@ const path = require('path');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
+//All Pets imported here
+const lilcat = require('../pet_assets/lilcat/pet');
+const bigdog = require('../pet_assets/bigdog/pet');
+const allPets = [lilcat, bigdog];
+
 const constructorMethod = (app) => {
   app.get('/user/:uid', async(req, res) => {
     const {uid} = req.params;
@@ -34,23 +39,30 @@ const constructorMethod = (app) => {
     return res.status(200).json(newUser);
   });
 
-  app.get('/GetAllPetIds', async(req, res) => {
-    const allIdKey = 'allPetIds'
-    let allIds = await client.lrangeAsync(allIdKey,0,-1);
-
-    if (allIds.length !== 0){
-      return res.status(200).json(allIds);
+  app.get('/GetPetImage/:id', async(req, res) => {
+    const {id} = req.params;
+    let pet = allPets.find(e => {
+      return e.GetId() === id;
+    })
+    //uid is alphanumeric
+    if (!id.match(/^[0-9a-z]+$/i) || !pet){
+      return res.status(400).json({message : `Invalid id`});
     }
 
-    //Else initialize list
-    const directoryPath = path.join(__dirname, '../pet_assets');
+    const directoryPath = path.join(__dirname, `../pet_assets/${pet.GetId()}/image.png`);
+    let bitmap = fs.readFileSync(directoryPath);
+    let base64 = Buffer(bitmap).toString('base64');
+    base64 = `data:image/png;base64, ${base64}`
+    res.status(200).json({base64});
+  });
 
-    fs.readdir(directoryPath, async function (err, files) {
-      for (file of files){
-        await client.lpushAsync(allIdKey, file);
-      }
-      return res.status(200).json(files);
+  app.get('/GetAllPetIds', async(req, res) => {
+    
+    let allPetIds = allPets.map(e => {
+      return e.GetId();
     });
+    
+    return res.status(200).json(allPetIds);
   });
 };
 

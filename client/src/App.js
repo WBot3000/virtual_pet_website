@@ -19,7 +19,7 @@ function App() {
             <div>
                 <Router>
                     <header>
-                        <h1 id="title">Virtual Pet</h1>
+                        <h1 id="title" style={{textAlign: 'center'}}>Virtual Pet</h1>
                     </header>
                     <Routes>
                         <Route exact path="/" element={<HomePage/>}/>

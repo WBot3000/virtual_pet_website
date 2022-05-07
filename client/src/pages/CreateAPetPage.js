@@ -1,4 +1,5 @@
 import CreateAPet from "../components/CreateAPet";
+import CreateAPetList from "../components/CreateAPetList";
 import Navigation from "../components/Navigation";
 import {useState, useContext} from "react";
 import { Navigate } from 'react-router-dom';
@@ -25,7 +26,8 @@ function CreateAPetPage() {
     {
         return <>
             <Navigation/>
-            <CreateAPet/>
+            <h1 style={{textAlign: 'center'}}>Create A Pet!</h1>
+            <CreateAPetList/>
         </>
     }
 }
