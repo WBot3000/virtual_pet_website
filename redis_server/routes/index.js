@@ -7,8 +7,7 @@ const client = redis.createClient();
 const flat = require('flat');
 const unflatten = flat.unflatten;
 const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
+
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
@@ -49,11 +48,22 @@ const constructorMethod = (app) => {
       return res.status(400).json({message : `Invalid id`});
     }
 
-    const directoryPath = path.join(__dirname, `../pet_assets/${pet.GetId()}/image.png`);
-    let bitmap = fs.readFileSync(directoryPath);
-    let base64 = Buffer(bitmap).toString('base64');
-    base64 = `data:image/png;base64, ${base64}`
+    let base64 = pet.GetImageBase64();
     res.status(200).json({base64});
+  });
+
+  app.get('/GetAllData/:id', async(req, res) => {
+    const {id} = req.params;
+    let pet = allPets.find(e => {
+      return e.GetId() === id;
+    })
+    //uid is alphanumeric
+    if (!id.match(/^[0-9a-z]+$/i) || !pet){
+      return res.status(400).json({message : `Invalid id`});
+    }
+
+    let allData = pet.GetAllData();
+    res.status(200).json({allData});
   });
 
   app.get('/GetAllPetIds', async(req, res) => {

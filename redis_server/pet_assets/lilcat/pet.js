@@ -1,10 +1,14 @@
 //https://techpiezo.com/linux/install-imagemagick-in-ubuntu-20-04-lts/
+const fs = require('fs');
+const path = require('path');
 const id = 'lilcat';
+const customItems = [{screen_name: "Boss Glasses", image_name: "boss-glasses.png", id: "boss-glasses"},
+  {screen_name: "Bow Tie", image_name: "bow-tie.png", id: "bow-tie"},];
 
 function CreateImage(){
   var im = require('imagemagick');
 
-im.readMetadata('lilcat.png', function(err, metadata){
+  im.readMetadata('lilcat.png', function(err, metadata){
   if (err) throw err;
     console.log(metadata);
   })
@@ -24,9 +28,26 @@ function GetId(){
   return id;
 }
 
+function GetAllData(){
+  let allData = {
+    id: GetId(),
+    custom_items: GetCustomizableOptions(),
+    base64_img: GetImageBase64()
+  }
+
+  return allData;
+}
+
+function GetImageBase64(){
+  const directoryPath = path.join(__dirname, `image.png`);
+  let bitmap = fs.readFileSync(directoryPath);
+  let base64 = Buffer(bitmap).toString('base64');
+  base64 = `data:image/png;base64, ${base64}`;
+  return base64;
+}
+
 function GetCustomizableOptions(){
-  //TODO
-  return null;
+  return customItems;
 }
 
 function CreateImageFromOptions(){
@@ -34,4 +55,4 @@ function CreateImageFromOptions(){
   return null;
 }
 
-module.exports = {GetId, GetCustomizableOptions, CreateImageFromOptions}
+module.exports = {GetId, GetCustomizableOptions, CreateImageFromOptions, GetAllData, GetImageBase64}

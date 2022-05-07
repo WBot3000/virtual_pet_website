@@ -12,7 +12,7 @@ import CountingGamePage from './pages/CountingGamePage';
 import RPSPage from './pages/RPSPage';
 import RiddleMeThisPage from './pages/RiddleMeThisPage';
 import SearchPage from './pages/SearchPage';
-import PetPage from "./pages/PetPage";
+import PetPage from "./pages/CreateAPetInstancePage";
 
 function App() {
     return (
@@ -25,6 +25,7 @@ function App() {
                         <Route exact path="/" element={<HomePage/>}/>
                         <Route path="/login" element={<LoginPage/>}/>
                         <Route path="/createapet" element={<CreateAPetPage/>}/>
+                        <Route path="/createapet/:id" element={<PetPage/>}/>
                         <Route path="/inventory" element={<InventoryPage/>}/>
                         <Route path="/shops" element={<ShopListPage/>}/>
                         <Route path="/games" element={<GameListPage/>}/>
