@@ -8,18 +8,22 @@ const CheckUserLoggedIn = (props) => {
     const [loggedin, setLoggedin] = useState(false);
     if(loading){
         getAuth().onAuthStateChanged(function(user) {
-            if (user) {
-                console.log(user);
-                props.onFinishedAuthentication(true);
-                props.onChange(false);
-                props.onFinishedUser(user);
-            } else {
-                // No user is signed in.
-                props.onFinishedAuthentication(false);
-                props.onChange(false);
-                //REMOVE ME------------------------------------
-                props.onFinishedUser({uid:"testuser123"});
-                //REMOVE ME------------------------------------
+            try {
+                if (user) {
+                    console.log(user);
+                    props.onFinishedAuthentication(true);
+                    props.onChange(false);
+                    props.onFinishedUser(user);
+                } else {
+                    // No user is signed in.
+                    props.onFinishedAuthentication(false);
+                    props.onChange(false);
+                    //REMOVE ME------------------------------------
+                    props.onFinishedUser({uid:"testuser123"});
+                    //REMOVE ME------------------------------------
+                }    
+            } catch (error) {
+                console.log(error);
             }
         });
     }
