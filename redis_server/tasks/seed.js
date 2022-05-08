@@ -17,7 +17,7 @@ async function main() {
         await users.changeHygiene("123", "kuro", -20);
         await users.changeHat("123", "kuro", "hat");
         
-        const item = await items.createItem("milk", "milk", 3, 10, 10, 10);
+        const item = await items.createItem("milk", "milk", 20, 3, 10, 10, 10);
         await items.getItemById(item._id);
         await users.addItem("123", item._id);
 

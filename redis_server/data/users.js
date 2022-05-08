@@ -413,6 +413,9 @@ async function addItem(gid, iid){
     const user = await getUserByGID(gid);
     const item = await itemData.getItemById(iid);
     const uses = item.useCount;
+    const price = item.price*-1;
+
+    changeMoney(gid, price);
   
     const usersCollection = await users();
     const updatedInfo = await usersCollection.updateOne(

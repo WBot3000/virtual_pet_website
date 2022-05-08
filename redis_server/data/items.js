@@ -24,7 +24,7 @@ async function getItemById(id) {
     return validate.convertObjId(item);
 }
 
-async function createItem(name, description, useCount, happinessChange, hungerChange, hygieneChange){
+async function createItem(name, description, price, useCount, happinessChange, hungerChange, hygieneChange){
     if(!validate.validString(name)) throw({code: 400, message: "createItem: item name is not a valid string"});
     if(!validate.validString(description)) throw({code: 400, message: "createItem: item des is not a valid string"});
 
@@ -44,6 +44,7 @@ async function createItem(name, description, useCount, happinessChange, hungerCh
 	let newItem = {
         name: name,
         description: description,
+        price: price,
         useCount: useCount,
         happinessChange: happinessChange,
         hungerChange: hungerChange,
