@@ -47,7 +47,7 @@ const useStyles = makeStyles({
 });
 const CreateAPet = (props) => {
   const classes = useStyles();
-
+  const [inputError, setError] = useState(false);
   const buildCard = (datum) => {
     return (
         <Card className={classes.card} variant="outlined">
@@ -70,14 +70,19 @@ const CreateAPet = (props) => {
     let options = [];
     props.data.petData.custom_items.forEach(e => {
         if(document.getElementById(e.id).checked){
-            options.push(document.getElementById(e.id).value);
+            options.push(e.id);
         }
       });
     let user = props.data.currentUserID;
 
     let payload = {name, options, user};
 
-    const { data } = await axios.post('http://localhost:3001/CreatePet', JSON.stringify(payload), {
+    if (!payload.name.toLowerCase().match(/^[a-z]+$/)){
+        setError(true);
+        return;
+    }
+
+    const { data } = await axios.post('http://localhost:3001/CreatePet', payload, {
       headers: { Accept: 'application/json' }
     });
     console.log(data);
@@ -118,9 +123,14 @@ const CreateAPet = (props) => {
     </div>;
 
   let card = buildCard(props.data);
+  let error = null;
+  if(inputError){
+      error = <h2 style={{color:'red', textAlign: 'center'}}>STOP SUBMITTING WRONG STUFF!!</h2>
+  }
   return <div>
             {card}
             {form}
+            {error}
         </div>;
 
 };

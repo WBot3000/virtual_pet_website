@@ -17,6 +17,9 @@ const CheckUserLoggedIn = (props) => {
                 // No user is signed in.
                 props.onFinishedAuthentication(false);
                 props.onChange(false);
+                //REMOVE ME------------------------------------
+                props.onFinishedUser({uid:"testuser123"});
+                //REMOVE ME------------------------------------
             }
         });
     }

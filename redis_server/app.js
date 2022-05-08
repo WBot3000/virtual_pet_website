@@ -4,7 +4,8 @@ const configRoutes = require('./routes');
 
 var cors = require('cors');
 app.use(cors());
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 configRoutes(app);
 
 app.listen(3001, () => {

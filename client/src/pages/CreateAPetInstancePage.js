@@ -43,10 +43,10 @@ function CreateAPetInstancePage() {
     if (loading){
         return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated} onFinishedUser={onSetCurrentUserID}></CheckUserLoggedIn>
     }
-    else if (!userIsAuthenticated){
+    /*else if (!userIsAuthenticated){
         return <Navigate to="/"></Navigate>
-    }
-    else if (!petData || !currentUserID){
+    }*/
+    else if (!petData ){//|| !currentUserID){
         return <div>
             <h2>Loading...</h2>
         </div>

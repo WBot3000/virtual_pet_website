@@ -74,6 +74,20 @@ const constructorMethod = (app) => {
     
     return res.status(200).json(allPetIds);
   });
+
+  app.post('/CreatePet', async(req, res) => {
+    if (!req.body.name || !req.body.user || !req.body.options){
+      return res.status(400).json({message : `Invalid payload`});
+    }
+
+    if (!req.body.name.toLowerCase().match(/^[0-9a-z]+$/i) || !req.body.user.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid payload`});
+    }
+
+    console.log(req.body)
+    
+    return res.status(200);
+  });
 };
 
 module.exports = constructorMethod;
