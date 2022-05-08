@@ -48,8 +48,16 @@ const constructorMethod = (app) => {
       return res.status(400).json({message : `Invalid id`});
     }
 
-    let base64 = pet.GetImageBase64();
-    res.status(200).json({base64});
+    const image_key = id
+    let image = await client.getAsync(image_key);
+    
+    //Check if image exists in redis
+    //Create image and put it in redis if not
+    if(!image){
+      image = pet.CreateImageFromOptions(options);
+      await client.setAsync(image_key, image);
+    }
+    res.status(200).json({image});
   });
 
   app.get('/GetAllData/:id', async(req, res) => {
@@ -85,8 +93,30 @@ const constructorMethod = (app) => {
     }
 
     console.log(req.body)
+    let {name, user, options, petId} = req.body;
+
+    options.sort();
+
+    //image key is name + all options in sorted order
+    const image_key = petId+options.join('');
+    let image = await client.getAsync(image_key);
     
-    return res.status(200);
+    //Check if image exists in redis
+    //Create image and put it in redis if not
+    if(!image){
+      let pet = allPets.find(e => {
+        return e.GetId() === petId;
+      })
+      image = pet.CreateImageFromOptions(options);
+      await client.setAsync(image_key, image);
+    }
+    
+
+    //Add animal to user profile in mongodb
+    //TODO let id = mongodb.addPet(user, name, petId, options)
+    let id = 'mv302v9j00da';
+    //Reroute user to their new page
+    return res.status(200).json(id);
   });
 };
 

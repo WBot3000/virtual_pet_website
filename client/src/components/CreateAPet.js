@@ -48,6 +48,7 @@ const useStyles = makeStyles({
 const CreateAPet = (props) => {
   const classes = useStyles();
   const [inputError, setError] = useState(false);
+  const [onPetCreated, setPetId] = useState(null);
   const buildCard = (datum) => {
     return (
         <Card className={classes.card} variant="outlined">
@@ -73,9 +74,10 @@ const CreateAPet = (props) => {
             options.push(e.id);
         }
       });
+    let petId = props.data.petData.id;
     let user = props.data.currentUserID;
 
-    let payload = {name, options, user};
+    let payload = {name, options, user, petId};
 
     if (!payload.name.toLowerCase().match(/^[a-z]+$/)){
         setError(true);
@@ -86,10 +88,14 @@ const CreateAPet = (props) => {
       headers: { Accept: 'application/json' }
     });
     console.log(data);
-    //TODO NAVIGATE
-    //setPostData(data);
-    
+    setPetId(data);
   };
+
+  if(onPetCreated){
+    let path = `/viewpets/${onPetCreated}`
+    return <Navigate to={path} />
+  }
+
   let options = props.data.petData.custom_items.map(e => {
     return <label for={e.id}> {e.screen_name}
         <input
