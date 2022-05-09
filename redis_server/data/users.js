@@ -4,6 +4,7 @@ const itemData = require("../data/items");
 const {ObjectId} = require('mongodb');
 const validate = require("./validation");
 
+//nuke the collection
 const removeAll = async function() {
 	const usersCollection = await users();
 	await usersCollection.deleteMany({ });
@@ -13,6 +14,7 @@ const removeAll = async function() {
 
 //userfunctions
 
+//get all the users
 async function getAllUsers() {
     const userCollection = await users();
     const allUsers = await userCollection.find({}).toArray();
@@ -21,8 +23,9 @@ async function getAllUsers() {
     return allUsers.map(validate.convertObjId);
 }
   
+//get the users by using the mongodb id/_id
 async function getUserById(id) {
-    if (!validate.validString(id)) throw({code: 400, message: "User id must be a valid string."});
+    if (!validate.validString(id)) throw({code: 400, message: "getUserById: User id must be a valid string."});
     let objId = ObjectId(id.trim());
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: objId });
@@ -34,6 +37,7 @@ async function getUserById(id) {
     return validate.convertObjId(user);
 }
 
+//create a user
 async function createUser(username, googleid) {
 	
     if(!validate.validString(username)) throw({code: 400, message: "createUser: Username is not a valid string"});
@@ -68,6 +72,7 @@ async function createUser(username, googleid) {
 	}
 }
 
+//gets the user by the google id
 async function getUserByGID(gid){
 
     if (!validate.validString(gid)) throw({code: 400, message: "getUserByGID: User id must be a valid string."});
@@ -84,6 +89,7 @@ async function getUserByGID(gid){
 	
 }
 
+//change the time of last sign in 
 async function lastSigned(gid){
 	if (!validate.validString(gid)) throw({code: 400, message: "lastSigned: Gid must be a valid string."});
 
@@ -91,7 +97,9 @@ async function lastSigned(gid){
 
 	const user = await getUserByGID(gid);
 
-	const updated = await usersCollection.updateOne({gid: gid}, {$set: {lastSigned: Date()}});
+    let currTime = Date();
+
+	const updated = await usersCollection.updateOne({gid: gid}, {$set: {lastSigned: currTime}});
 	if (updated === 0) {
 		throw({code: 500, message: "lastSigned: unable to change money"});
 	}
@@ -100,6 +108,7 @@ async function lastSigned(gid){
 	} 
 }
 
+//change the amount of money the user has. if subtracting please use a negative number
 async function changeMoney(gid, difference){
 	if (!validate.validString(gid)) throw({code: 400, message: "changeMoney: Gid must be a valid string."});
 	if (!validate.validNum(difference)) throw({code: 400, message: "changeMoney: Difference is not a valid number."});
@@ -121,7 +130,8 @@ async function changeMoney(gid, difference){
 
 //pet functions
 
-async function addPet(gid, petName, species) {//, color) {
+//create a pet and push to user pet array
+async function addPet(gid, petName, species){//, color) {
 
 	if (!validate.validString(gid)) throw({code: 400, message: "addPet: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "addPet: petname must be a valid string."});
@@ -171,6 +181,7 @@ async function addPet(gid, petName, species) {//, color) {
 	}
 }
 
+//find a pet in the user obj using the pet name
 async function getPet(gid, petName){
     if (!validate.validString(gid)) throw({code: 400, message: "addPet: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "addPet: petname must be a valid string."});
@@ -198,6 +209,7 @@ async function getAllPets(gid) {
     return user.pets;
 }
 
+//change the happiness level of pet belonging to user with gid
 async function changeHappiness(gid, petName, difference) {
     if (!validate.validString(gid)) throw({code: 400, message: "changeHappinesst: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "changeHappiness: petname must be a valid string."});
@@ -233,6 +245,7 @@ async function changeHappiness(gid, petName, difference) {
 
 }
 
+//change the hunger level of pet belonging to user with gid
 async function changeHunger(gid, petName, difference) {
     if (!validate.validString(gid)) throw({code: 400, message: "changeHunger: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "changeHunger: petname must be a valid string."});
@@ -266,6 +279,8 @@ async function changeHunger(gid, petName, difference) {
 		return await getPet(gid, petName);
 	}
 }
+
+//change the hygiene level of pet belonging to user with gid
 async function changeHygiene(gid, petName, difference) {
     if (!validate.validString(gid)) throw({code: 400, message: "changeHygiene: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "changeHygiene: petname must be a valid string."});
@@ -300,6 +315,7 @@ async function changeHygiene(gid, petName, difference) {
 	}
 }
 
+//pet clothing functions
 async function changeHat(gid, petName, img){
     if (!validate.validString(gid)) throw({code: 400, message: "changeClothing: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "changeClothing: petname must be a valid string."});
@@ -391,9 +407,10 @@ async function changeShoes(gid, petName, img){
 
 //inventory functions
 
+//delete item from user inventory
 async function deleteItem(gid, iid){
-    if (!validate.validString(gid)) throw({code: 400, message: "addItem: gid must be a valid string."});
-    if (!validate.validString(iid)) throw({code: 400, message: "addItem: item id must be a valid string."});
+    if (!validate.validString(gid)) throw({code: 400, message: "deleteItem: gid must be a valid string."});
+    if (!validate.validString(iid)) throw({code: 400, message: "deleteItem: item id must be a valid string."});
 
     const user = await getUserByGID(gid);
   
@@ -403,9 +420,11 @@ async function deleteItem(gid, iid){
       { $pull: { inventory: {itemId: iid}}}
     );
     if (updatedInfo.modifiedCount === 0) {
-      throw ({code: 500, message: "addItem: could not add item"});
+      throw ({code: 500, message: "deleteItem: could not delete item"});
     }
 }
+
+//adds item to user inventory with use count and subtracts item price from user wallet
 async function addItem(gid, iid){
     if (!validate.validString(gid)) throw({code: 400, message: "addItem: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "addItem: item id must be a valid string."});
@@ -427,6 +446,8 @@ async function addItem(gid, iid){
     }
 
 }
+
+//get the item from user inventory
 async function getItem(gid, iid){
 
     if (!validate.validString(gid)) throw({code: 400, message: "getItem: gid must be a valid string."});
@@ -447,6 +468,7 @@ async function getItem(gid, iid){
 
 }
 
+//get all the items in inventory
 async function getAllItems(gid){
     if (!validate.validString(gid)) throw({code: 400, message: "addPet: gid must be a valid string."});
 
@@ -456,6 +478,7 @@ async function getAllItems(gid){
 
 }
 
+//update the use count of the item
 async function updateUses(gid, iid, diff){
     if (!validate.validString(gid)) throw({code: 400, message: "updateUses: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "updateUses: item id must be a valid string."});
@@ -485,6 +508,7 @@ async function updateUses(gid, iid, diff){
 
 }
 
+//uses the item, changing pet stats and item use count
 async function useItem(gid, iid, petName) {
     if (!validate.validString(gid)) throw({code: 400, message: "useItem: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "useItem: item id must be a valid string."});
@@ -495,7 +519,7 @@ async function useItem(gid, iid, petName) {
     const item = await getItem(gid, iid);
 
     const itemInfo = await itemData.getItemById(iid);
-    const updated = updateUses(gid, iid, -1);
+    const updated = await updateUses(gid, iid, -1);
 
     if(updated.useCount <= 0){
         deleteItem(gid, iid);
@@ -517,7 +541,8 @@ module.exports = {
 	getUserByGID,
 	createUser,
 	getUserById,
-	getAllUsers, 
+	getAllUsers,
+    lastSigned,
 	changeMoney,
     addPet,
     getAllPets,

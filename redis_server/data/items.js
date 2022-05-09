@@ -55,7 +55,7 @@ async function createItem(name, description, price, useCount, happinessChange, h
 	const added = await itemCollection.insertOne(newItem);
 
 	if(added.insertCount === 0) {
-		throw({code: 500, message: "createItem: Could not add user."});
+		throw({code: 500, message: "createItem: Could not add item."});
 	}
 	else{
         const id = added.insertedId.toString();

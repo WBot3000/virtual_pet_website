@@ -2,6 +2,7 @@ const dbConnection = require("../config/mongoConnection");
 const data = require("../data/");
 const users = data.users;
 const items = data.items;
+const shops = data.shops;
 
 async function main() {
   const db = await dbConnection();
@@ -17,12 +18,18 @@ async function main() {
         await users.changeHygiene("123", "kuro", -20);
         await users.changeHat("123", "kuro", "hat");
         
-        const item = await items.createItem("milk", "milk", 20, 3, 10, 10, 10);
+        const item = await items.createItem("milk", "milk", 20, 1, 10, 10, 10);
+        const item2 = await items.createItem("notmilk", "notmilk", 20, 3, 10, 10, 10);
         await items.getItemById(item._id);
         await users.addItem("123", item._id);
+        await users.addItem("123", item2._id);
 
-        //await users.updateUses("123", item._id, -1);
+        //const test = await users.updateUses("123", item._id, -1);
         await users.useItem("123", item._id, "kuro");
+
+        const store = await shops.createShop("belle's store");
+        await shops.addStock(store._id, item._id);
+
         
   }catch(e){
       console.log(e);
