@@ -94,7 +94,7 @@ const CreateAPetList = () => {
         <Card className={classes.card} variant="outlined">
         <Link to={`/createapet/${datum.id}`}>
             
-            <CardMedia component='img' src={`${datum.img_data.data.base64}`} />
+            <CardMedia component='img' src={`${datum.img_data.data.image}`} />
 
               <CardContent>
                 <Typography

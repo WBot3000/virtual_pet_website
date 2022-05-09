@@ -2,18 +2,24 @@ import {useState, useContext} from "react";
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 import { Navigate } from 'react-router-dom';
 function HomePage() {
-    const [loading, setLoading] = useState(true);
+    const [checkedUserLoggedIn, setCheckedLogin] = useState(false);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
-    const onFinishedLoading = (loading) => {
-        setLoading(loading);
+    const [currentUserID, setCurrentUserID] = useState(null);
+
+    const onFinishedChecking = (finished) => {
+        setCheckedLogin(true);
     };
 
     const onSetAuthenticated = (authenticated) => {
         setAuthenticated(authenticated)
     }
 
-    if (loading){
-        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
+    const onSetCurrentUserID = (id) => {
+        setCurrentUserID(id)
+    }
+
+    if (!checkedUserLoggedIn){
+        return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
     else if (userIsAuthenticated){
         return <Navigate to="/shops"></Navigate>

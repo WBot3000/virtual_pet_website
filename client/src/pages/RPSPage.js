@@ -6,18 +6,24 @@ import { Navigate } from 'react-router-dom';
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 
 function RPSPage() {
-    const [loading, setLoading] = useState(true);
+    const [checkedUserLoggedIn, setCheckedLogin] = useState(false);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
-    const onFinishedLoading = (loading) => {
-        setLoading(loading);
+    const [currentUserID, setCurrentUserID] = useState(null);
+
+    const onFinishedChecking = (finished) => {
+        setCheckedLogin(true);
     };
 
     const onSetAuthenticated = (authenticated) => {
         setAuthenticated(authenticated)
     }
 
-    if (loading){
-        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated}></CheckUserLoggedIn>
+    const onSetCurrentUserID = (id) => {
+        setCurrentUserID(id)
+    }
+
+    if (!checkedUserLoggedIn){
+        return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
 
     else if (!userIsAuthenticated){

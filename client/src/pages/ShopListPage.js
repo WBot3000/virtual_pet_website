@@ -7,11 +7,11 @@ import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 import user from "../data_access_layer/user";
 
 function ShopListPage() {
-    const [loading, setLoading] = useState(true);
+    const [checkedUserLoggedIn, setCheckedLogin] = useState(false);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
     const [currentUserID, setCurrentUserID] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             console.log(currentUserID)
@@ -24,18 +24,20 @@ function ShopListPage() {
         fetchData();
     }, [currentUserID]);
 
-    const onFinishedLoading = (loading) => {
-        setLoading(loading);
+    const onFinishedChecking = (finished) => {
+        setCheckedLogin(true);
     };
+
     const onSetAuthenticated = (authenticated) => {
-        setAuthenticated(authenticated);
-    }
-    const onSetCurrentUserID = (user) => {
-        setCurrentUserID(user.uid);
+        setAuthenticated(authenticated)
     }
 
-    if (loading){
-        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated} onFinishedUser={onSetCurrentUserID}></CheckUserLoggedIn>
+    const onSetCurrentUserID = (id) => {
+        setCurrentUserID(id)
+    }
+
+    if (!checkedUserLoggedIn){
+        return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
 
     else if (!userIsAuthenticated){

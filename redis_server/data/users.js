@@ -121,7 +121,7 @@ async function changeMoney(gid, difference){
 
 //pet functions
 
-async function addPet(gid, petName, species, color) {
+async function addPet(gid, petName, species) {//, color) {
 
 	if (!validate.validString(gid)) throw({code: 400, message: "addPet: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "addPet: petname must be a valid string."});
@@ -148,7 +148,7 @@ async function addPet(gid, petName, species, color) {
 	newPet = {
 		petName: petName,
         species: species,
-        color: color,
+        //color: color,
         clothing:
             {
                 hat: "",

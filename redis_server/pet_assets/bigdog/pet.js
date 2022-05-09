@@ -1,6 +1,7 @@
 //https://techpiezo.com/linux/install-imagemagick-in-ubuntu-20-04-lts/
 const fs = require('fs');
 const path = require('path');
+const species = "Dog";
 const id = 'bigdog';
 const customItems = [{screen_name: "Boss Glasses", image_name: "boss-glasses.png"},
   {screen_name: "Bow Tie", image_name: "bow-tie.png"},];
@@ -55,4 +56,8 @@ function CreateImageFromOptions(){
   return null;
 }
 
-module.exports = {GetId, GetCustomizableOptions, CreateImageFromOptions, GetAllData, GetImageBase64}
+function GetSpecies(){
+  return species;
+}
+
+module.exports = {GetId, GetCustomizableOptions, CreateImageFromOptions, GetAllData, GetImageBase64, GetSpecies}

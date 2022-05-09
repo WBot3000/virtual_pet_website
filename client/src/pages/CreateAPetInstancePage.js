@@ -6,11 +6,11 @@ import { Navigate, useParams } from 'react-router-dom';
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 
 function CreateAPetInstancePage() {
-    const [loading, setLoading] = useState(true);
-    const [petData, setPetData] = useState(null);
+    const [checkedUserLoggedIn, setCheckedLogin] = useState(false);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
-    const [errorOccured, setError] = useState(false);
     const [currentUserID, setCurrentUserID] = useState(null);
+    const [petData, setPetData] = useState(null);
+    const [errorOccured, setError] = useState(false);
 
     let { id } = useParams();
 
@@ -20,8 +20,6 @@ function CreateAPetInstancePage() {
           try {
             let {data} = await axios.get(`http://localhost:3001/GetAllData/${id}`);
             setPetData(data.allData);
-            
-            setLoading(false);
           } catch (e) {
             setError(true);
           }
@@ -29,24 +27,25 @@ function CreateAPetInstancePage() {
         fetchData();
       }, []);
 
-    const onFinishedLoading = (loading) => {
-        setLoading(loading);
+      const onFinishedChecking = (finished) => {
+        setCheckedLogin(true);
     };
 
     const onSetAuthenticated = (authenticated) => {
         setAuthenticated(authenticated)
     }
-    const onSetCurrentUserID = (user) => {
-        setCurrentUserID(user.uid);
+
+    const onSetCurrentUserID = (id) => {
+        setCurrentUserID(id)
     }
 
-    if (loading){
-        return <CheckUserLoggedIn onChange={onFinishedLoading} onFinishedAuthentication={onSetAuthenticated} onFinishedUser={onSetCurrentUserID}></CheckUserLoggedIn>
+    if (!checkedUserLoggedIn){
+        return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
-    /*else if (!userIsAuthenticated){
+    else if (!userIsAuthenticated){
         return <Navigate to="/"></Navigate>
-    }*/
-    else if (!petData ){//|| !currentUserID){
+    }
+    else if (!petData ){
         return <div>
             <h2>Loading...</h2>
         </div>

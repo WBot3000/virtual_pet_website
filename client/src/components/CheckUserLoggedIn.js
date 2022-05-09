@@ -11,15 +11,15 @@ const CheckUserLoggedIn = (props) => {
             try {
                 if (user) {
                     console.log(user);
-                    props.onFinishedAuthentication(true);
-                    props.onChange(false);
-                    props.onFinishedUser(user);
+                    props.userIsAuthenticated(true);
+                    props.onFinished(true);
+                    props.setUserId(user.uid);
                 } else {
                     // No user is signed in.
-                    props.onFinishedAuthentication(false);
-                    props.onChange(false);
+                    props.userIsAuthenticated(false);
+                    props.onFinished(true);
                     //REMOVE ME------------------------------------
-                    props.onFinishedUser({uid:"testuser123"});
+                    //props.onFinishedUser({uid:"testuser123"});
                     //REMOVE ME------------------------------------
                 }    
             } catch (error) {

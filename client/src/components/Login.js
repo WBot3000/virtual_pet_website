@@ -14,8 +14,10 @@ const Login = (props) => {
     let performGoogleLogin = function (){
         signInWithPopup(auth, provider)
             .then((result) => {
-                console.log(auth)
-                props.onFinishedAuthentication(true);
+                console.log(auth);
+                console.log(result.user.uid);
+                props.userIsAuthenticated(true);
+                props.setUserId(result.user.uid);
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
@@ -24,6 +26,7 @@ const Login = (props) => {
                 // ...
             }).catch((error) => {
                 console.log(error)
+                props.userIsAuthenticated(false);
                 // Handle Errors here.
                 const errorCode = error.code;
                 const errorMessage = error.message;

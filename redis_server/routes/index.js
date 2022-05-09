@@ -12,6 +12,7 @@ const axios = require('axios');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
+const mongodb_DAL = require('../data/index');
 //All Pets imported here
 const lilcat = require('../pet_assets/lilcat/pet');
 const bigdog = require('../pet_assets/bigdog/pet');
@@ -54,7 +55,7 @@ const constructorMethod = (app) => {
     //Check if image exists in redis
     //Create image and put it in redis if not
     if(!image){
-      image = pet.CreateImageFromOptions(options);
+      image = pet.GetImageBase64();
       await client.setAsync(image_key, image);
     }
     res.status(200).json({image});
@@ -83,12 +84,28 @@ const constructorMethod = (app) => {
     return res.status(200).json(allPetIds);
   });
 
+  //returns the time since last logged in. if new user, creates a new user and returns 0
+  app.post('/OnGoogleLogin/:id', async(req, res) => {
+    const {id} = req.params;
+    if (!id.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid id`});
+    }
+
+    let user = null;
+    try {
+      let user = await mongodb_DAL.users.getUserByGID(id);  
+    } catch (error) {
+      user = await mongodb_DAL.users.createUser(id, id);
+    }
+    res.status(200).json({user});
+  });
+
   app.post('/CreatePet', async(req, res) => {
     if (!req.body.name || !req.body.user || !req.body.options){
       return res.status(400).json({message : `Invalid payload`});
     }
 
-    if (!req.body.name.toLowerCase().match(/^[0-9a-z]+$/i) || !req.body.user.match(/^[0-9a-z]+$/i)){
+    if (!req.body.name.toLowerCase().match(/^[a-z]+$/i) || !req.body.user.match(/^[0-9a-z]+$/i)){
       return res.status(400).json({message : `Invalid payload`});
     }
 
@@ -101,22 +118,22 @@ const constructorMethod = (app) => {
     const image_key = petId+options.join('');
     let image = await client.getAsync(image_key);
     
+    let pet = allPets.find(e => {
+      return e.GetId() === petId;
+    })
     //Check if image exists in redis
     //Create image and put it in redis if not
     if(!image){
-      let pet = allPets.find(e => {
-        return e.GetId() === petId;
-      })
       image = pet.CreateImageFromOptions(options);
       await client.setAsync(image_key, image);
     }
     
 
     //Add animal to user profile in mongodb
-    //TODO let id = mongodb.addPet(user, name, petId, options)
-    let id = 'mv302v9j00da';
+    await mongodb_DAL.users.addPet(user, name, pet.GetSpecies());
+    
     //Reroute user to their new page
-    return res.status(200).json(id);
+    return res.status(200).json(name);
   });
 };
 

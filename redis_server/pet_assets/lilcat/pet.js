@@ -2,6 +2,8 @@
 const fs = require('fs');
 const path = require('path');
 const id = 'lilcat';
+const species = "Cat";
+
 const customItems = [{screen_name: "Boss Glasses", image_name: "boss-glasses.png", id: "boss-glasses"},
   {screen_name: "Bow Tie", image_name: "bow-tie.png", id: "bow-tie"},];
 
@@ -36,7 +38,7 @@ function CreateImage(options){
   } catch (error) {
     console.log(error)
   } 
-  
+
   return GetImageBase64('output.png');
 }
 
@@ -72,4 +74,8 @@ function CreateImageFromOptions(options){
   return base64Image;
 }
 
-module.exports = {GetId, GetCustomizableOptions, CreateImageFromOptions, GetAllData, GetImageBase64}
+function GetSpecies(){
+  return species;
+}
+
+module.exports = {GetId, GetCustomizableOptions, CreateImageFromOptions, GetAllData, GetImageBase64, GetSpecies}
