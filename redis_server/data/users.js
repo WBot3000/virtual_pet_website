@@ -22,7 +22,7 @@ async function getAllUsers() {
 }
   
 async function getUserById(id) {
-    if (!validate.validString(id)) throw({code: 400, message: "User id must be a valid string."});
+    if (!validate.validString(id)) throw({code: 400, message: "getUserById: User id must be a valid string."});
     let objId = ObjectId(id.trim());
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: objId });
@@ -91,7 +91,9 @@ async function lastSigned(gid){
 
 	const user = await getUserByGID(gid);
 
-	const updated = await usersCollection.updateOne({gid: gid}, {$set: {lastSigned: Date()}});
+    let currTime = Date();
+
+	const updated = await usersCollection.updateOne({gid: gid}, {$set: {lastSigned: currTime}});
 	if (updated === 0) {
 		throw({code: 500, message: "lastSigned: unable to change money"});
 	}
@@ -392,8 +394,8 @@ async function changeShoes(gid, petName, img){
 //inventory functions
 
 async function deleteItem(gid, iid){
-    if (!validate.validString(gid)) throw({code: 400, message: "addItem: gid must be a valid string."});
-    if (!validate.validString(iid)) throw({code: 400, message: "addItem: item id must be a valid string."});
+    if (!validate.validString(gid)) throw({code: 400, message: "deleteItem: gid must be a valid string."});
+    if (!validate.validString(iid)) throw({code: 400, message: "deleteItem: item id must be a valid string."});
 
     const user = await getUserByGID(gid);
   
@@ -403,9 +405,11 @@ async function deleteItem(gid, iid){
       { $pull: { inventory: {itemId: iid}}}
     );
     if (updatedInfo.modifiedCount === 0) {
-      throw ({code: 500, message: "addItem: could not add item"});
+      throw ({code: 500, message: "deleteItem: could not delete item"});
     }
 }
+
+//adds item to user inventory with use count and subtracts item price from user wallet
 async function addItem(gid, iid){
     if (!validate.validString(gid)) throw({code: 400, message: "addItem: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "addItem: item id must be a valid string."});
@@ -485,6 +489,7 @@ async function updateUses(gid, iid, diff){
 
 }
 
+//uses the item, changing pet stats and item use count
 async function useItem(gid, iid, petName) {
     if (!validate.validString(gid)) throw({code: 400, message: "useItem: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "useItem: item id must be a valid string."});
@@ -495,7 +500,7 @@ async function useItem(gid, iid, petName) {
     const item = await getItem(gid, iid);
 
     const itemInfo = await itemData.getItemById(iid);
-    const updated = updateUses(gid, iid, -1);
+    const updated = await updateUses(gid, iid, -1);
 
     if(updated.useCount <= 0){
         deleteItem(gid, iid);
@@ -517,7 +522,8 @@ module.exports = {
 	getUserByGID,
 	createUser,
 	getUserById,
-	getAllUsers, 
+	getAllUsers,
+    lastSigned,
 	changeMoney,
     addPet,
     getAllPets,

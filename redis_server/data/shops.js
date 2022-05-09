@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const shops = mongoCollections.shops;
+const itemData = require("../data/items");
 const {ObjectId} = require('mongodb');
 const validate = require("./validation");
 
@@ -11,8 +12,8 @@ async function getAllShops() {
     return allShops.map(validate.convertObjId);
 }
   
-async function getshopById(id) {
-    if (!validate.validString(id)) throw({code: 400, message: "shop id must be a valid string."});
+async function getShopById(id) {
+    if (!validate.validString(id)) throw({code: 400, message: "getshopById: shop id must be a valid string."});
     let objId = ObjectId(id.trim());
     const shopCollection = await shops();
     const shop = await shopCollection.findOne({ _id: objId });
@@ -24,16 +25,10 @@ async function getshopById(id) {
     return validate.convertObjId(shop);
 }
 
-async function createShop(name, ){
-    if(!validate.validString(name)) throw({code: 400, message: "createshop: shop name is not a valid string"});
-    if(!validate.validString(description)) throw({code: 400, message: "createshop: shop des is not a valid string"});
+async function createShop(name){
+    if(!validate.validString(name)) throw({code: 400, message: "createShop: shop name is not a valid string"});
 
-    if(!validate.validNum(useCount)) throw({code: 400, message: "createshop: usecount is not a valid string"});
-    if(!validate.validNum(happinessChange)) throw({code: 400, message: "createshop: happinessChange is not a valid string"});
-    if(!validate.validNum(hungerChange)) throw({code: 400, message: "createshop: hungerChange is not a valid string"});
-    if(!validate.validNum(hygieneChange)) throw({code: 400, message: "createshop: hygieneChange is not a valid string"});
-
-	const shopCollection = await Shops();
+	const shopCollection = await shops();
 
     const found = await shopCollection.findOne({name: name});
 
@@ -43,12 +38,7 @@ async function createShop(name, ){
 	
 	let newshop = {
         name: name,
-        description: description,
-        useCount: useCount,
-        happinessChange: happinessChange,
-        hungerChange: hungerChange,
-        hygieneChange: hygieneChange
-
+        inventory: []
 	};
 	
 	const added = await shopCollection.insertOne(newshop);
@@ -61,3 +51,52 @@ async function createShop(name, ){
         return await getshopById(id);
 	}
 }
+
+async function addStock(shopId, itemId){
+    if (!validate.validString(shopId)) throw({code: 400, message: "addStock: shop id must be a valid string."});
+    if (!validate.validString(itemId)) throw({code: 400, message: "addStock: item id must be a valid string."});
+
+    const shop = getShopById(shopId);
+    const item = itemData.getItemById(itemId);
+
+    let sid = ObjectId(shopId.trim());
+
+    const shopCollection = await shops();
+    const added = await shopCollection.updateOne({_id: sid}, {$push: {inventory: itemId }});
+	if (added === 0) {
+		throw({code: 500, message: "addStock: unable to add item to shop"});
+	}
+	else{
+		return await getShopById(shopId);
+	}
+
+}
+
+async function deleteStock(shopId, itemId){
+    if (!validate.validString(shopId)) throw({code: 400, message: "deleteStock: shop id must be a valid string."});
+    if (!validate.validString(itemId)) throw({code: 400, message: "deleteStock: item id must be a valid string."});
+
+    const shop = getShopById(shopId);
+    const item = itemData.getItemById(itemId);
+
+    let sid = ObjectId(shopId.trim());
+
+    const shopCollection = await shops();
+    const deleted = await shopCollection.updateOne({_id: sid}, {$pull: {inventory: itemId }});
+	if (deleted === 0) {
+		throw({code: 500, message: "deleteStock: unable to remove item from shop"});
+	}
+	else{
+		return await getShopById(shopId);
+	}
+
+}
+
+module.exports = {
+    getAllShops,
+    getShopById,
+    createShop,
+    addStock,
+    deleteStock
+}
+

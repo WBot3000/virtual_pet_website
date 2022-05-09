@@ -17,12 +17,15 @@ async function main() {
         await users.changeHygiene("123", "kuro", -20);
         await users.changeHat("123", "kuro", "hat");
         
-        const item = await items.createItem("milk", "milk", 20, 3, 10, 10, 10);
+        const item = await items.createItem("milk", "milk", 20, 1, 10, 10, 10);
+        const item2 = await items.createItem("notmilk", "notmilk", 20, 3, 10, 10, 10);
         await items.getItemById(item._id);
         await users.addItem("123", item._id);
+        await users.addItem("123", item2._id);
 
-        //await users.updateUses("123", item._id, -1);
+        //const test = await users.updateUses("123", item._id, -1);
         await users.useItem("123", item._id, "kuro");
+
         
   }catch(e){
       console.log(e);
