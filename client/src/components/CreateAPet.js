@@ -111,7 +111,7 @@ const CreateAPet = (props) => {
     <form className={classes.form} id="simple-form" onSubmit={formSubmit}>
         <label>
         Name:
-        <input pattern="[A-Za-z]"
+        <input pattern="[A-Za-z]+"
             title="Aplha characters only!"
             id="name"
             name="name"

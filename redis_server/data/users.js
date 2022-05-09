@@ -133,14 +133,14 @@ async function changeMoney(gid, difference){
 //pet functions
 
 //create a pet and push to user pet array
-async function addPet(gid, petName, species){//, color) {
+async function addPet(gid, petName, petId, options){//, color) {
 
 	if (!validate.validString(gid)) throw({code: 400, message: "addPet: gid must be a valid string."});
     if (!validate.validString(petName)) throw({code: 400, message: "addPet: petname must be a valid string."});
-    if (!validate.validString(petName)) throw({code: 400, message: "addPet: species must be a valid string."});
-    if (!validate.validString(petName)) throw({code: 400, message: "addPet: color must be a valid string."});
-
-    if(!validate.validUsername(petName)) throw({code: 400, message: "addPet: petName is not valid."});
+    if (!validate.validString(petId)) throw({code: 400, message: "addPet: petId must be a valid string."});
+    for (option of options) {
+        if (!validate.validString(option)) throw({code: 400, message: "addPet: option must be a valid string."});
+    }
 
 	const usersCollection = await users();
 
@@ -148,7 +148,7 @@ async function addPet(gid, petName, species){//, color) {
 
     let foundPet = false;
     for(i = 0; i < user.pets.length; i++){
-        if (user.pet[i].petName == petName) {
+        if (user.pets[i].petName == petName) {
             foundPet = true;
         }
     }
@@ -159,8 +159,8 @@ async function addPet(gid, petName, species){//, color) {
 
 	newPet = {
 		petName: petName,
-        species: species,
-        //color: color,
+        petId: petId,
+        options: options,
         clothing:
             {
                 hat: "",

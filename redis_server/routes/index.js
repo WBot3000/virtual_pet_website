@@ -7,6 +7,7 @@ const client = redis.createClient();
 const flat = require('flat');
 const unflatten = flat.unflatten;
 const axios = require('axios');
+const xss = require('xss');
 
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -114,7 +115,6 @@ const constructorMethod = (app) => {
     return res.status(200).json(allPetIds);
   });
 
-  //returns the time since last logged in. if new user, creates a new user and returns 0
   app.post('/OnGoogleLogin/:id', async(req, res) => {
     const {id} = req.params;
     if (!id.match(/^[0-9a-z]+$/i)){
@@ -167,7 +167,7 @@ const constructorMethod = (app) => {
     
 
     //Add animal to user profile in mongodb
-    await mongodb_DAL.users.addPet(user, name, pet.GetSpecies());
+    await mongodb_DAL.users.addPet(user, xss(name), petId, options);
     
     //Reroute user to their new page
     return res.status(200).json(name);
