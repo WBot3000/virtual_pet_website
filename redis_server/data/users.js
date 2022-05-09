@@ -169,6 +169,9 @@ async function addPet(gid, petName, petId, options){//, color) {
                 pants: "",
                 shoes: "",
             },
+        dateLastFed: Date(),
+        dateLastCleaned: Date(),
+        dateLastPet: Date(),
         hunger: 100,
         happiness: 100,
         hygiene: 100
