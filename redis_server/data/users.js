@@ -104,7 +104,9 @@ async function lastSigned(gid){
 		throw({code: 500, message: "lastSigned: unable to change money"});
 	}
 	else{
-		return await getUserByGID(gid);
+		let updatedUser = await getUserByGID(gid);
+        let prevSignIn = user.lastSigned;
+        return {updatedUser, prevSignIn};
 	} 
 }
 

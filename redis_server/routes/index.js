@@ -16,6 +16,7 @@ const mongodb_DAL = require('../data/index');
 //All Pets imported here
 const lilcat = require('../pet_assets/lilcat/pet');
 const bigdog = require('../pet_assets/bigdog/pet');
+const { lastSigned } = require('../data/users');
 const allPets = [lilcat, bigdog];
 
 const constructorMethod = (app) => {
@@ -26,17 +27,46 @@ const constructorMethod = (app) => {
       return res.status(400).json({message : `Invalid uid`});
     }
 
-    //Check redis
-    let user = await client.getAsync(`user${uid}`);
-    if(user){
-      return res.status(200).json(unflatten(JSON.parse(user)));
+    let user = null;
+    try {
+      user = await mongodb_DAL.users.getUserByGID(uid);
+    } catch (error) {
+      return res.status(404).json({error: "Not Found"});
     }
 
-    //Initialize user if not found
-    let newUser = {uid, pet: null, money: 100, lastLoginTime: -1, inventory: []}
-    await client.setAsync(`user${uid}`, JSON.stringify(flat(newUser)))
+    return res.status(200).json(user);
+  });
 
-    return res.status(200).json(newUser);
+  app.get('/CheckIfDailyReward/:uid', async(req, res) => {
+    const {uid} = req.params;
+    //uid is alphanumeric
+    if (!uid.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid uid`});
+    }
+
+    let key = `lastSigned${uid}`
+    let lastSigin = null;
+    try {
+      lastSigin = await client.getAsync(key);
+    } catch (error) {
+      return res.status(404).json({error: "Not Found"});
+    }
+
+    if (!lastSigin) return res.status(404).json({error: "Not Found"});
+
+    let now = new Date();
+    lastSigin = new Date(lastSigin);
+    let differenceInDays = Math.floor((now - lastSigin) / (1000*60*60*24));
+    let differenceInMinutes = Math.floor((now - lastSigin) / (1000*60));
+
+    //use difference in seconds to test
+    if (differenceInMinutes >= 1){
+      await mongodb_DAL.users.changeMoney(uid, 100);
+      await client.setAsync(key, Date());
+      return res.status(200).json({reward: true, amount: 100});
+    }
+
+    return res.status(200).json({reward: false});
   });
 
   app.get('/GetPetImage/:id', async(req, res) => {
@@ -97,7 +127,14 @@ const constructorMethod = (app) => {
     } catch (error) {
       user = await mongodb_DAL.users.createUser(id, id);
     }
-    res.status(200).json({user});
+
+    //upate last signed in
+    let data = await mongodb_DAL.users.lastSigned(id);
+    
+    //put it in redis
+    let key = `lastSigned${id}`
+    await client.setAsync(key, data.prevSignIn);
+    res.status(200).json({data});
   });
 
   app.post('/CreatePet', async(req, res) => {
