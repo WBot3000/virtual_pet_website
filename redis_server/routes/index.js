@@ -188,6 +188,22 @@ const constructorMethod = (app) => {
     return res.status(200).json({image});
   });
 
+  app.get('/GetUserPet/:uid/:pid', async(req, res) => {
+    const {uid, pid} = req.params;
+    if (!uid.match(/^[0-9a-z]+$/i) || !pid.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid id`});
+    }
+
+    let pet = null;
+    try {
+      pet = await mongodb_DAL.users.getPet(uid, pid);
+    } catch (error) {
+      return res.status(404).json({error: "Not Found"});
+    }
+    
+    return res.status(200).json(pet);
+  });
+
   app.post('/CreatePet', async(req, res) => {
     if (!req.body.name || !req.body.user || !req.body.options){
       return res.status(400).json({message : `Invalid payload`});
