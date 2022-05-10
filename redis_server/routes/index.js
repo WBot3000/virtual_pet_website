@@ -115,6 +115,25 @@ const constructorMethod = (app) => {
     return res.status(200).json(allPetIds);
   });
 
+  app.get('/GetAllUserPetIds/:uid', async(req, res) => {
+    const {uid} = req.params;
+    //uid is alphanumeric
+    if (!uid.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid uid`});
+    }
+
+
+    let pets = null;
+
+    try {
+      pets = await mongodb_DAL.users.getAllPets(uid);
+    } catch (error) {
+      return res.status(404).json({error: "Not Found"});
+    }
+    
+    return res.status(200).json(pets);
+  });
+
   app.post('/OnGoogleLogin/:id', async(req, res) => {
     const {id} = req.params;
     if (!id.match(/^[0-9a-z]+$/i)){
@@ -135,6 +154,54 @@ const constructorMethod = (app) => {
     let key = `lastSigned${id}`
     await client.setAsync(key, data.prevSignIn);
     res.status(200).json({data});
+  });
+
+  app.get('/GetPetImage/:uid/:pid', async(req, res) => {
+    const {uid, pid} = req.params;
+    if (!uid.match(/^[0-9a-z]+$/i) || !pid.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid id`});
+    }
+
+    let pet = null;
+    try {
+      pet = await mongodb_DAL.users.getPet(uid, pid);
+    } catch (error) {
+      return res.status(404).json({error: "Not Found"});
+    }
+
+    let options = pet.options.sort();
+
+    //image key is name + all options in sorted order
+    const image_key = pet.petId+options.join('');
+    let image = await client.getAsync(image_key);
+    
+    let petObj = allPets.find(e => {
+      return e.GetId() === pet.petId;
+    })
+    //Check if image exists in redis
+    //Create image and put it in redis if not
+    if(!image){
+      image = petObj.CreateImageFromOptions(options);
+      await client.setAsync(image_key, image);
+    }
+    
+    return res.status(200).json({image});
+  });
+
+  app.get('/GetUserPet/:uid/:pid', async(req, res) => {
+    const {uid, pid} = req.params;
+    if (!uid.match(/^[0-9a-z]+$/i) || !pid.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid id`});
+    }
+
+    let pet = null;
+    try {
+      pet = await mongodb_DAL.users.getPet(uid, pid);
+    } catch (error) {
+      return res.status(404).json({error: "Not Found"});
+    }
+    
+    return res.status(200).json(pet);
   });
 
   app.post('/CreatePet', async(req, res) => {

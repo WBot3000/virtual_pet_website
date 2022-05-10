@@ -30,11 +30,9 @@ function CreateAPetPage() {
         setUserId={onSetCurrentUserID}
       ></CheckUserLoggedIn>
     );
-  } else {
-
-  /*else if (!userIsAuthenticated){
+  } else if (!userIsAuthenticated){
         return <Navigate to="/"></Navigate>
-    }*/
+    }
     return (
       <>
         <h1 style={{ textAlign: "center" }}>Create A Pet!</h1>
