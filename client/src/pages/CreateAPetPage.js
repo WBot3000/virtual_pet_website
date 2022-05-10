@@ -39,7 +39,7 @@ function CreateAPetPage() {
         <CreateAPetList />
       </>
     );
-  }
 }
+
 
 export default CreateAPetPage;

@@ -25,9 +25,9 @@ function ViewPetsPage() {
         return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
 
-    /*else if (!userIsAuthenticated){
+    else if (!userIsAuthenticated){
         return <Navigate to="/"></Navigate>
-    }*/
+    }
     else if (!currentUserID){
         return <div>
             <h2>Loading...</h2>
@@ -36,7 +36,6 @@ function ViewPetsPage() {
     else
     {
         return <>
-            <Navigation/>
             <h1 style={{textAlign: 'center'}}>Your Pets!</h1>
             <ViewPetList user_id={currentUserID}/>
         </>
