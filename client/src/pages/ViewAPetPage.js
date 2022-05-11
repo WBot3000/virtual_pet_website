@@ -29,7 +29,7 @@ function ViewAPetPage() {
             }
         }
         fetchData();
-      }, [currentUserID]);
+    }, [currentUserID]);
 
       const onFinishedChecking = (finished) => {
         setCheckedLogin(true);

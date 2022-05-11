@@ -5,10 +5,13 @@ const bluebird = require('bluebird');
 const redis = require('redis');
 const client = redis.createClient();
 const xss = require('xss');
-
+const fs = require('fs');
+const path = require('path');
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
+
+var wkhtmltopdf = require('wkhtmltopdf');
 
 const mongodb_DAL = require('../data/index');
 
@@ -92,9 +95,23 @@ router.post('/CreatePet', async(req, res) => {
 
     //Add animal to user profile in mongodb
     await mongodb_DAL.users.addPet(user, xss(name), petId, options);
-    
-    //Reroute user to their new page
     return res.status(200).json(name);
+});
+
+router.post('/GetAnimalPdf', async(req, res) => {
+  if (!req.body.data){
+    return res.status(400).json({message : `Invalid payload`});
+  }
+  let petData = req.body.data;
+  wkhtmltopdf(`<div>
+  <h1>Your Pet: ${petData.petData.petName} | Happiness:${petData.petData.happiness} | Hunger:${petData.petData.hunger} | Hygiene:${petData.petData.hygiene}</h1>
+  <img src="${petData.img}" alt="pet" />
+  </div>`, { output: 'out.pdf' });
+
+  const directoryPath = path.join(__dirname, `../out.pdf`);
+  let bitmap = fs.readFileSync(directoryPath);
+  let buf = Buffer(bitmap).toString('base64');
+  res.send(buf);
 });
 
 module.exports = router;

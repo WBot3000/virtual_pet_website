@@ -20,6 +20,7 @@
     "mongodb": "4.5.0",
     "node-redis": "^0.1.7",
     "redis": "^3.0.2",
+    "wkhtmltopdf": "^0.4.0",
     "xss": "^1.0.11"
   }
 }
