@@ -8,33 +8,35 @@ async function main() {
   const db = await dbConnection();
   await db.dropDatabase();
 
-  try{
-        await users.createUser("belle", "123");
-        await users.createUser("kai", "321");
-        await users.changeMoney("123", 50);
-        await users.addPet("123", "kuro", "dog", "black");
-        await users.changeHappiness("123", "kuro", -20);
-        await users.changeHunger("123", "kuro", -20);
-        await users.changeHygiene("123", "kuro", -20);
-        await users.changeHat("123", "kuro", "hat");
-        
-        const item = await items.createItem("milk", "milk", 20, 1, 10, 10, 10);
-        const item2 = await items.createItem("notmilk", "notmilk", 20, 3, 10, 10, 10);
-        await items.getItemById(item._id);
-        await users.addItem("123", item._id);
-        await users.addItem("123", item2._id);
+  try {
+    await users.createUser("belle", "123");
+    await users.createUser("kai", "321");
+    await users.changeMoney("123", 50);
+    await users.addPet("123", "kuro", "dog", "black");
+    await users.changeHappiness("123", "kuro", -20);
+    await users.changeHunger("123", "kuro", -20);
+    await users.changeHygiene("123", "kuro", -20);
+    await users.changeHat("123", "kuro", "hat");
 
-        //const test = await users.updateUses("123", item._id, -1);
-        await users.useItem("123", item._id, "kuro");
+    const item = await items.createItem("milk", "milk", 20, 1, 10, 10, 10);
+    const item2 = await items.createItem("notmilk", "notmilk", 20, 3, 10, 10, 10);
+    await items.getItemById(item._id);
+    await users.addItem("123", item._id);
+    await users.addItem("123", item2._id);
 
-        const store = await shops.createShop("belle's store");
-        await shops.addStock(store._id, item._id);
+    //const test = await users.updateUses("123", item._id, -1);
+    await users.useItem("123", item._id, "kuro");
 
-        
-  }catch(e){
-      console.log(e);
+    const store = await shops.createShop("belle's store");
+    await shops.addStock(store._id, item._id);
+    await shops.addStock(store._id,item2._id);
+    await shops.deleteStock(store._id,item._id);
+    console.log("seeding done");
+
+  } catch (e) {
+    console.log(e);
   }
-  
+
 }
 
 main();
