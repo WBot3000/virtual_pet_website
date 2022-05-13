@@ -67,6 +67,7 @@ function CreateAPetInstancePage() {
     let pageData = { petData, currentUserID };
     return (
       <>
+        <Navigation />
         <h1 style={{ textAlign: "center" }}>Customize Your New Pet!</h1>
         <CreateAPet data={pageData} />
       </>
