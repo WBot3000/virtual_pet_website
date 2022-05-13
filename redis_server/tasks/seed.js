@@ -27,10 +27,11 @@ async function main() {
     //const test = await users.updateUses("123", item._id, -1);
     await users.useItem("123", item._id, "kuro");
 
-    const store = await shops.createShop("belle's store");
-    await shops.addStock(store._id, item._id);
-    await shops.addStock(store._id,item2._id);
-    await shops.deleteStock(store._id,item._id);
+    const gameShop = await shops.createShop("GamesShop");
+    const groomingStore = await shops.createShop("GroomingStore");
+    const supermarket = await shops.createShop("Supermarket");
+    await shops.addStock(supermarket._id, item._id);
+    await shops.addStock(supermarket._id,item2._id);
     console.log("seeding done");
 
   } catch (e) {

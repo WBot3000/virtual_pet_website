@@ -1,41 +1,116 @@
-function ShopsList() { //TODO: Add links to the individual store pages
-    return <>
-        <p className="indented">Here are all the shops the world of Virtual Pet has to offer!</p> 
-        <div id="shops_list"> 
-            <p>Food</p>
-            <dl className="shops_category">
-                <dt>Groceries of Goodness</dt>
-                <dd>Good food at a great price!</dd>
-                <dt>Candylocation</dt>
-                <dd>Delicious candy, now trademark infringement free!</dd>
-                <dt>Très Cher et Petit</dt>
-                <dd>Food for those who like luxury...</dd>
-            </dl>
-            <p>Clothes</p>
-            <dl className="shops_category">
-                <dt>Taylor the Tailor's Tailor-y</dt>
-                <dd>Clothes made by the legendary tailor, Taylor.</dd>
-                <dt>The Rainbow Express</dt>
-                <dd>Paint your pet a crazy color on the Rainbow Express.</dd>
-                <dt>Wally's Wears</dt>
-                <dd>Unconventional clothing for the unconventional pet.</dd>
-            </dl>
-            <p>Entertainment</p>
-            <dl className="shops_category">
-                <dt>Toytopia</dt>
-                <dd>Who doesn't love toys?</dd>
-                <dt>Gamers R Us</dt>
-                <dd>It's dangerous to go alone. Take these!</dd>
-                <dt>Richard's Sporting Stuffs</dt>
-                <dd>GOOOOOOOOOOOOOAL!!!</dd>
-            </dl>
-            <p>Cleanliness</p>
-            <dl className="shops_category">
-                <dt>Spa-licious</dt>
-                <dd>The finest in pet grooming</dd>
-            </dl>
-        </div>
-    </>
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link, useParams, Navigate } from 'react-router-dom';
+import {
+    Card,
+    CardActionArea,
+    CardContent,
+    CardMedia,
+    Grid,
+    Typography,
+    makeStyles
+} from '@material-ui/core';
+
+import '../App.css';
+const useStyles = makeStyles({
+    card: {
+        maxWidth: 250,
+        height: 'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        borderRadius: 5,
+        border: '1px solid #178577',
+        boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);'
+    },
+    titleHead: {
+        borderBottom: '1px solid #178577',
+        fontWeight: 'bold'
+    },
+    grid: {
+        flexGrow: 1,
+        flexDirection: 'row'
+    },
+    media: {
+        height: '100%',
+        width: '100%'
+    },
+    button: {
+        color: '#178577',
+        fontWeight: 'bold',
+        fontSize: 12
+    },
+    h3: {
+        textAlign: 'center'
+    }
+});
+
+const ShopsList = () => {
+    const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [allShops, setAllShops] = useState([]);
+    const [errorOccured, setError] = useState(false);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const { data } = await axios.get(`http://localhost:3001/allShops`);
+                setAllShops(data);
+                setLoading(false);
+            } catch (e) {
+                setError(true);
+            }
+        }
+        fetchData();
+    }, []);
+
+    if (errorOccured) {
+        return (
+            <div>
+                <Navigate to="/" />
+            </div>
+        );
+    }
+    else if (loading) {
+        return (
+            <div>
+                <h2>Loading....</h2>
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                <br />
+                <br />
+                <Grid container className={classes.grid} spacing={5}>
+                    {allShops.map((shop) => {
+                        return (<Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={shop._id}>
+                            <Card className={classes.card} variant="outlined">
+                                <Link to={`/shop/${shop._id}`}>
+
+                                    <CardMedia component='img' src={require(`../assets/store_pics/${shop.name}.png`)} />
+
+                                    <CardContent>
+                                        <Typography
+                                            className={classes.titleHead}
+                                            gutterBottom
+                                            variant="h6"
+                                            component="h2"
+                                        >
+                                            {shop.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+
+                                        </Typography>
+                                    </CardContent>
+                                </Link>
+
+                            </Card>
+                        </Grid>)
+                    })}
+                </Grid>
+            </div>
+        );
+    }
 }
 
 export default ShopsList;
