@@ -1,3 +1,4 @@
+import Navigation from "../components/Navigation";
 import ShopFront from "../components/ShopFront";
 import axios from 'axios';
 import { useState, useContext, useEffect } from "react";
@@ -60,7 +61,10 @@ const ShopPage = () => {
         );
     } else {
         return (
+            <>
+            <Navigation/>
             <ShopFront data={shopData}/>
+            </>
         );
     }
 }
