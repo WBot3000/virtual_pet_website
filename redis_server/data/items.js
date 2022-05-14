@@ -25,13 +25,14 @@ async function getItemById(id) {
 }
 
 async function createItem(name, description, price, useCount, happinessChange, hungerChange, hygieneChange){
+    if(arguments.length!=7) throw ({code :400, message:"createItem: Provide all details to create item"});
     if(!validate.validString(name)) throw({code: 400, message: "createItem: item name is not a valid string"});
     if(!validate.validString(description)) throw({code: 400, message: "createItem: item des is not a valid string"});
 
-    if(!validate.validNum(useCount)) throw({code: 400, message: "createItem: usecount is not a valid string"});
-    if(!validate.validNum(happinessChange)) throw({code: 400, message: "createItem: happinessChange is not a valid string"});
-    if(!validate.validNum(hungerChange)) throw({code: 400, message: "createItem: hungerChange is not a valid string"});
-    if(!validate.validNum(hygieneChange)) throw({code: 400, message: "createItem: hygieneChange is not a valid string"});
+    if(isNaN(useCount)) throw({code: 400, message: "createItem: usecount is not a valid string"});
+    if(isNaN(happinessChange)) throw({code: 400, message: "createItem: happinessChange is not a valid string"});
+    if(isNaN(hungerChange)) throw({code: 400, message: "createItem: hungerChange is not a valid string"});
+    if(isNaN(hygieneChange)) throw({code: 400, message: "createItem: hygieneChange is not a valid string"});
 
 	const itemCollection = await items();
 

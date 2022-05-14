@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useState, useContext, useEffect } from "react";
 import { Navigate, useParams } from 'react-router-dom';
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
+import { Grid } from "@mui/material";
 
 const ShopPage = () => {
     const [loading, setLoading] = useState(true);
@@ -63,7 +64,9 @@ const ShopPage = () => {
         return (
             <>
             <Navigation/>
+            <Grid>
             <ShopFront data={shopData}/>
+            </Grid>
             </>
         );
     }

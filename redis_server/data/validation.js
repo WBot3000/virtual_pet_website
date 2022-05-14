@@ -30,6 +30,10 @@ function convertObjId(doc) {
 }
 
 function validNum(num) {
+    console.log(`In validNum ${num}`);
+    console.log(num);
+    console.log(!num);
+    console.log(isNaN(num));
     if (!num || isNaN(num)) return false;
     return true;
 }

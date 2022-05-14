@@ -86,12 +86,7 @@ function ShopListPage() {
         <Navigation />
         {reward}
         <Grid container>
-          <Grid item xs={5}>
-            <PetBox />
-          </Grid>
-          <Grid item xs={7}>
-            <ShopsList />
-          </Grid>
+          <ShopsList />
         </Grid>
       </>
     );
