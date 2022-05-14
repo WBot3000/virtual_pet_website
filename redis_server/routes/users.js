@@ -91,7 +91,7 @@ router.post('/OnGoogleLogin/:id', async(req, res) => {
 
     let user = null;
     try {
-      let user = await mongodb_DAL.users.getUserByGID(id);  
+      user = await mongodb_DAL.users.getUserByGID(id);  
     } catch (error) {
       user = await mongodb_DAL.users.createUser(id, id);
     }

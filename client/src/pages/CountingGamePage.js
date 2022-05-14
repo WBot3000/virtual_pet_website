@@ -36,6 +36,7 @@ function CountingGamePage() {
   } else {
     return (
       <>
+        <Navigation />
         <Grid container>
           <Grid item xs={5}>
             <PetBox />

@@ -83,6 +83,7 @@ function ShopListPage() {
     }
     return (
       <>
+        <Navigation />
         {reward}
         <Grid container>
           <Grid item xs={5}>

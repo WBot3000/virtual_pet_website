@@ -63,6 +63,7 @@ function ViewAPetPage() {
     }
     else
     {
+        <Navigation />
         let pageData = {petData, currentUserID}
         return <>
             <h1 style={{textAlign: 'center'}}>Care For Your Pet!</h1>

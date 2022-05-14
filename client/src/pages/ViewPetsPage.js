@@ -36,6 +36,7 @@ function ViewPetsPage() {
     else
     {
         return <>
+            <Navigation />
             <h1 style={{textAlign: 'center'}}>Your Pets!</h1>
             <ViewPetList user_id={currentUserID}/>
         </>

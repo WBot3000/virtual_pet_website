@@ -35,6 +35,7 @@ function CreateAPetPage() {
     }
     return (
       <>
+        <Navigation />
         <h1 style={{ textAlign: "center" }}>Create A Pet!</h1>
         <CreateAPetList />
       </>

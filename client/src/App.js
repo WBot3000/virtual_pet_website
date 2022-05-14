@@ -18,6 +18,7 @@ import SearchPage from "./pages/SearchPage";
 import PetPage from "./pages/CreateAPetInstancePage";
 import Navigation from "./components/Navigation";
 
+
 function App() {
   return (
     <div>
@@ -26,7 +27,6 @@ function App() {
           <h1 id="title" style={{ textAlign: "center" }}>
             Virtual Pet
           </h1>
-          <Navigation />
         </header>
         <Routes>
           <Route exact path="/" element={<HomePage />} />
