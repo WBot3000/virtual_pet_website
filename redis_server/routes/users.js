@@ -152,5 +152,21 @@ router.get('/GetUserPet/:uid/:pid', async(req, res) => {
     
     return res.status(200).json(pet);
 });
+
+router.get('/GetUserItems/:uid', async(req, res) => {
+  const {uid} = req.params;
+  if (!uid.match(/^[0-9a-z]+$/i)){
+    return res.status(400).json({message : `Invalid id`});
+  }
+
+  let items = null;
+  try {
+    items = await mongodb_DAL.users.getAllItems(uid);
+  } catch (error) {
+    return res.status(404).json({error: "Not Found"});
+  }
+  
+  return res.status(200).json({items});
+});
   
 module.exports = router;

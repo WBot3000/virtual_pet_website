@@ -24,14 +24,27 @@ async function getItemById(id) {
     return validate.convertObjId(item);
 }
 
+async function getItemByName(name) {
+    if (!validate.validString(name)) throw({code: 400, message: "item id must be a valid string."});
+ 
+    const itemCollection = await items();
+    const item = await itemCollection.findOne({ name: name });
+  
+    if (!item) {
+        throw ({code: 404, message: `No item found with the name, ${name}.`});
+    }
+    // Convert _id field to string before returning
+    return validate.convertObjId(item);
+}
+
 async function createItem(name, description, price, useCount, happinessChange, hungerChange, hygieneChange){
     if(!validate.validString(name)) throw({code: 400, message: "createItem: item name is not a valid string"});
     if(!validate.validString(description)) throw({code: 400, message: "createItem: item des is not a valid string"});
 
-    if(!validate.validNum(useCount)) throw({code: 400, message: "createItem: usecount is not a valid string"});
-    if(!validate.validNum(happinessChange)) throw({code: 400, message: "createItem: happinessChange is not a valid string"});
-    if(!validate.validNum(hungerChange)) throw({code: 400, message: "createItem: hungerChange is not a valid string"});
-    if(!validate.validNum(hygieneChange)) throw({code: 400, message: "createItem: hygieneChange is not a valid string"});
+    if(!validate.validNum(useCount)) throw({code: 400, message: "createItem: usecount is not a valid num"});
+    if(!validate.validNum(happinessChange)) throw({code: 400, message: "createItem: happinessChange is not a valid num"});
+    if(!validate.validNum(hungerChange)) throw({code: 400, message: "createItem: hungerChange is not a valid num"});
+    if(!validate.validNum(hygieneChange)) throw({code: 400, message: "createItem: hygieneChange is not a valid num"});
 
 	const itemCollection = await items();
 
@@ -82,6 +95,7 @@ module.exports = {
     createItem,
     getItemById,
     getAllItems,
-    deleteItem
+    deleteItem,
+    getItemByName
 
 }

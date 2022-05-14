@@ -30,7 +30,7 @@ function convertObjId(doc) {
 }
 
 function validNum(num) {
-    if (!num || isNaN(num)) return false;
+    if (num === null || isNaN(num)) return false;
     return true;
 }
   

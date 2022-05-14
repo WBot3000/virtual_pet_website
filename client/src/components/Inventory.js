@@ -1,14 +1,39 @@
 import {useState, useEffect} from 'react';
 import InvDisplay from './InvDisplay';
+import axios from 'axios';
 
-function Inventory() {
+function Inventory(props) {
+    
+    const gid = props.userId;
+    console.log(gid);
+    const [items, setItems] = useState([]);
 
-    const [items, setItems] = useState([{id: "123", name: "Item1"}, {id: "456", name: "Item2"}, {id:"789", name: "Item3"}, {id:"000", name: "Item4"}, {id:"101", name: "Item5"}]);
+    async function fetchData(id) {
+        try{
+            return await axios.get(`http://localhost:3001/getUserItems/${id}`);
+        }catch(e){
+            console.log("error fetching items");
+            return null;
+        }
+    }
 
+    const getItems = async () =>{
+        const inven = await fetchData(gid);
+        console.log("inven1: ", inven.data.items);
+        setItems(inven.data.items);
+    }
+
+    useEffect(() => {
+        getItems();
+    })
+
+    console.log("items: ", items);
+    
     function consumeItem(idx) {
         let newInv = items.slice(0, idx).concat(items.slice(idx+1));
         setItems(newInv);
     }
+
 
     if(items.length === 0) {
         return (
