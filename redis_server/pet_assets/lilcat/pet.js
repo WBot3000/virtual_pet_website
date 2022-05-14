@@ -27,19 +27,18 @@ function CreateImage(options){
 
   const directoryPath = path.join(__dirname, `image.png`);
   const outputPath = path.join(__dirname, `output.png`);
-  try {
-    let magickOptions = [directoryPath];
-    magickOptions.push.apply(magickOptions, allOptions);
-    magickOptions.push.apply(magickOptions, ['-resize', '2000x2000', outputPath]);
-    im.convert(magickOptions, function(err, stdout){
-      if (err) throw err;
-      console.log('stdout:', stdout);
-  });  
-  } catch (error) {
-    console.log(error)
-  } 
+  let magickOptions = [directoryPath];
+  magickOptions.push.apply(magickOptions, allOptions);
+  magickOptions.push.apply(magickOptions, ['-resize', '2000x2000', outputPath]);
 
-  return GetImageBase64('output.png');
+  return new Promise((resolve, reject) => {
+    im.convert(magickOptions, function(err, stdout){
+            if(err) {
+                reject(err)
+            }
+            resolve(GetImageBase64('output.png'));
+        });
+  });
 }
 
 function GetId(){
@@ -68,9 +67,8 @@ function GetCustomizableOptions(){
   return customItems;
 }
 
-function CreateImageFromOptions(options){
-  //TODO
-  let base64Image = CreateImage(options);
+async function CreateImageFromOptions(options){
+  let base64Image = await CreateImage(options);
   return base64Image;
 }
 

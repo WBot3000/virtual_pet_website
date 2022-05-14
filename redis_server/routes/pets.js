@@ -88,13 +88,18 @@ router.post('/CreatePet', async(req, res) => {
     //Check if image exists in redis
     //Create image and put it in redis if not
     if(!image){
-      image = pet.CreateImageFromOptions(options);
+      image = await pet.CreateImageFromOptions(options);
       await client.setAsync(image_key, image);
     }
     
 
     //Add animal to user profile in mongodb
-    await mongodb_DAL.users.addPet(user, xss(name), petId, options);
+    try {
+      await mongodb_DAL.users.addPet(user, xss(name), petId, options);
+    } catch (error) {
+      return res.status(400).json({error: "You already have a pet with that name!"});
+    }
+    
     return res.status(200).json(name);
 });
 
