@@ -1,28 +1,44 @@
 //https://techpiezo.com/linux/install-imagemagick-in-ubuntu-20-04-lts/
 const fs = require('fs');
 const path = require('path');
-const species = "Dog";
 const id = 'bigdog';
-const customItems = [{screen_name: "Boss Glasses", image_name: "boss-glasses.png"},
-  {screen_name: "Bow Tie", image_name: "bow-tie.png"},];
+const species = "Dog";
 
-function CreateImage(){
+const customItems = [{screen_name: "Backwards Cap", image_name: "cap.png", id: "cap"},
+  {screen_name: "Moustache", image_name: "moustache.png", id: "moustache"},];
+
+function CreateImage(options){
+  //If no options provided, just return the image
+  if (options.length === 0) {
+    return GetImageBase64();
+  }
+
   var im = require('imagemagick');
 
-  im.readMetadata('lilcat.png', function(err, metadata){
-  if (err) throw err;
-    console.log(metadata);
-  })
+  let allOptions = [];
+  if(options.includes('cap') ){
+    const capPath = path.join(__dirname, `cap.png`);
+    allOptions.push.apply(allOptions, [capPath, '-gravity', 'Center', '-geometry', '2000x2000+30+5', '-composite'])
+  }
+  if(options.includes('moustache') ){
+    const stachePath = path.join(__dirname, `moustache.png`);
+    allOptions.push.apply(allOptions, [stachePath, '-gravity', 'Center', '-geometry', '2000x2000+30+1000', '-composite'])
+  }
 
-  try {
-    im.convert(['lilcat.png', 'boss-glasses.png', '-gravity', 'Center', '-geometry', '2000x2000+30+5', '-composite', '-resize', '2000x2000', 'output.png'], 
-    function(err, stdout){
-    if (err) throw err;
-    console.log('stdout:', stdout);
-  });  
-  } catch (error) {
-    console.log(error)
-  } 
+  const directoryPath = path.join(__dirname, `image.png`);
+  const outputPath = path.join(__dirname, `output.png`);
+  let magickOptions = [directoryPath];
+  magickOptions.push.apply(magickOptions, allOptions);
+  magickOptions.push.apply(magickOptions, ['-resize', '2000x2000', outputPath]);
+
+  return new Promise((resolve, reject) => {
+    im.convert(magickOptions, function(err, stdout){
+            if(err) {
+                reject(err)
+            }
+            resolve(GetImageBase64('output.png'));
+        });
+  });
 }
 
 function GetId(){
@@ -39,8 +55,8 @@ function GetAllData(){
   return allData;
 }
 
-function GetImageBase64(){
-  const directoryPath = path.join(__dirname, `image.png`);
+function GetImageBase64(fn='image.png'){
+  const directoryPath = path.join(__dirname, fn);
   let bitmap = fs.readFileSync(directoryPath);
   let base64 = Buffer(bitmap).toString('base64');
   base64 = `data:image/png;base64, ${base64}`;
@@ -51,9 +67,9 @@ function GetCustomizableOptions(){
   return customItems;
 }
 
-function CreateImageFromOptions(){
-  //TODO
-  return null;
+async function CreateImageFromOptions(options){
+  let base64Image = await CreateImage(options);
+  return base64Image;
 }
 
 function GetSpecies(){
