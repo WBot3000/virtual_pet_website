@@ -6,12 +6,19 @@ import {
   CardHeader,
   Grid,
   Typography,
-  makeStyles,
   Stack,
+  LinearProgress,
 } from "@mui/material";
+import { makeStyles } from "@material-ui/core";
+const useStyles = makeStyles({
+  bar: {
+    height: "100%",
+  },
+});
 function PetBox() {
+  const classes = useStyles();
   const data = {
-    pet: { name: "Little Cat", hunger: 100, happiness: 100, cleanliness: 100 },
+    pet: { name: "Little Cat", hunger: 90, happiness: 80, cleanliness: 80 },
     money: 42,
   };
 
@@ -38,13 +45,69 @@ function PetBox() {
           style={{ minHeight: "80vh" }}
         >
           {" "}
-          <p>Stats</p>
-          <ul id="stats_list">
-            <li>Hunger: {data.pet.hunger}</li>
-            <li>Happiness: {data.pet.happiness}</li>
-            <li>Cleanliness: {data.pet.cleanliness}</li>
-          </ul>
-          <p>Petbucks: ${data.money}</p>
+          <br />
+          <Typography variant="h4">Stats</Typography>
+          <Grid item>
+            <Grid style={{ width: "500px" }} container spacing={2}>
+              <Grid item xs={3}>
+                <Typography variant="h6">Hunger: </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <LinearProgress
+                  variant="determinate"
+                  value={data.pet.hunger}
+                  className={classes.bar}
+                  color="success"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Typography variant="h6">{data.pet.hunger}%</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <br />
+          <Grid item>
+            <Grid style={{ width: "500px" }} container spacing={2}>
+              <Grid item xs={3}>
+                <Typography variant="h6">Happiness: </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <LinearProgress
+                  variant="determinate"
+                  value={data.pet.happiness}
+                  className={classes.bar}
+                  color="primary"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Typography variant="h6">{data.pet.happiness}%</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <br />
+          <Grid item>
+            <Grid style={{ width: "500px" }} container spacing={2}>
+              <Grid item xs={3}>
+                <Typography variant="h6">Hygiene: </Typography>
+              </Grid>
+              <Grid item xs={8}>
+                <LinearProgress
+                  variant="determinate"
+                  value={data.pet.cleanliness}
+                  className={classes.bar}
+                  color="secondary"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Typography variant="h6">{data.pet.cleanliness}%</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <br />
+          <br />
+          <Grid item>
+            <Typography variant="h4">Petbucks: ${data.money}</Typography>
+          </Grid>
         </Grid>
       </CardContent>
     </Card>
