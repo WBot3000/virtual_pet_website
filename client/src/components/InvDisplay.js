@@ -10,7 +10,7 @@ function InvDisplay(props) {
 
     return (
         <>
-            <img src={require('../assets/inv/placeholder.png')} />
+            <img src={require('../assets/inv/placeholder.png')} title={props.itemName} />
             <p>{itemName}</p>
         </>
     );

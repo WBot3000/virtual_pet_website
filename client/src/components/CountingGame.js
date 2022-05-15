@@ -81,6 +81,7 @@ function CountingGame() {
           <img
             src={require(`../assets/counting_pics/${shapeToFind}_${colorToFind}.png`)}
             id="sample_shape"
+            title="Count all these!"
           />
         </p>
         <CountingGameScreen objects={objArray} />
