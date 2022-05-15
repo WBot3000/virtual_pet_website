@@ -46,11 +46,10 @@ function PetBox() {
         >
           {" "}
           <br />
-          <Typography variant="h4">Stats</Typography>
           <Grid item>
             <Grid style={{ width: "500px" }} container spacing={2}>
               <Grid item xs={3}>
-                <Typography variant="h6">Hunger: </Typography>
+                <Typography variant="body1">Hunger: </Typography>
               </Grid>
               <Grid item xs={8}>
                 <LinearProgress
@@ -61,7 +60,7 @@ function PetBox() {
                 />
               </Grid>
               <Grid item xs={1}>
-                <Typography variant="h6">{data.pet.hunger}%</Typography>
+                <Typography variant="body1">{data.pet.hunger}%</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -69,7 +68,7 @@ function PetBox() {
           <Grid item>
             <Grid style={{ width: "500px" }} container spacing={2}>
               <Grid item xs={3}>
-                <Typography variant="h6">Happiness: </Typography>
+                <Typography variant="body1">Happiness: </Typography>
               </Grid>
               <Grid item xs={8}>
                 <LinearProgress
@@ -80,7 +79,7 @@ function PetBox() {
                 />
               </Grid>
               <Grid item xs={1}>
-                <Typography variant="h6">{data.pet.happiness}%</Typography>
+                <Typography variant="body1">{data.pet.happiness}%</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -88,7 +87,7 @@ function PetBox() {
           <Grid item>
             <Grid style={{ width: "500px" }} container spacing={2}>
               <Grid item xs={3}>
-                <Typography variant="h6">Hygiene: </Typography>
+                <Typography variant="body1">Hygiene: </Typography>
               </Grid>
               <Grid item xs={8}>
                 <LinearProgress
@@ -99,7 +98,7 @@ function PetBox() {
                 />
               </Grid>
               <Grid item xs={1}>
-                <Typography variant="h6">{data.pet.cleanliness}%</Typography>
+                <Typography variant="body1">{data.pet.cleanliness}%</Typography>
               </Grid>
             </Grid>
           </Grid>
