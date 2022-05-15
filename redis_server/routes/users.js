@@ -32,6 +32,18 @@ router.get('/user/:uid', async(req, res) => {
     return res.status(200).json(user);
 });
 
+router.get('/user/GetAllUsers', async(req, res) => {
+
+  let users = null;
+  try {
+    users = await mongodb_DAL.users.getAllUsers();
+  } catch (error) {
+    return res.status(404).json({error: "Not Found"});
+  }
+
+  return res.status(200).json(users);
+});
+
 router.get('/CheckIfDailyReward/:uid', async(req, res) => {
     const {uid} = req.params;
     //uid is alphanumeric

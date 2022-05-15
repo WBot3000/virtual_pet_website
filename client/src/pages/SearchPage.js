@@ -39,7 +39,7 @@ function SearchPage() {
         <Navigation />
         <Grid container>
           <Grid item xs={12}>
-            <Search />
+            <Search userId={currentUserID}/>
           </Grid>
         </Grid>
       </>
