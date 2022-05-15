@@ -19,27 +19,37 @@ function Alert(props) {
 }
 
 function Search(props) {
-  //Dummy data for search functionality (Pet could contain pet data)
-  const data = [
-    { id: 1, user: "AwesomeMan", pet: { name: "George" } },
-    { id: 2, user: "AwesomeWoman", pet: { name: "Clark" } },
-    { id: 3, user: "NotBot", pet: { name: "Leslie" } },
-    { id: 4, user: "Unicorn Overlord", pet: { name: "Unicorn Underlord" } },
-    { id: 5, user: "zzzzz", pet: { name: "George 2.0" } },
-  ];
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState(data);
+  const [searchResults, setSearchResults] = useState(null);
   const [errorOccured, setError] = useState(false);
-  const [allAnimals, setAnimals] = useState(null);
+  const [allAnimals, setAnimals] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     console.log('on load useeffect');
     async function fetchData() {
       try {
-        const {data} = await axios.get(`http://localhost:3001/user/GetAllUsers`);
-        setAnimals(data);
+        const {data} = await axios.get(`http://localhost:3001/GetAllUsers`);
+        console.log(data);
+        let animals = [];
+
+        for (let e of data){
+          let user = e.username;
+          for (let userPet of e.pets){
+            let pet = {name: userPet.petName, petId: userPet.petId, options: userPet.options};
+            let payload = {petId: pet.petId, options: pet.options}
+            console.log("payload")
+            console.log(payload)
+            const { data } = await axios.post('http://localhost:3001/GetPetImageFromOptions', payload, {
+              headers: { Accept: 'application/json' }
+            });
+            let newAnimals = allAnimals;
+            animals.push({user, pet, img_data: data.img_data});
+            console.log(animals)
+          }
+        }
+        setAnimals(animals);
+        setSearchResults(animals);
         setLoading(false);
       } catch (e) {
         setError(true);
@@ -51,9 +61,9 @@ function Search(props) {
   function submitSearch(e) {
     e.preventDefault();
     if (searchTerm.trim() == "") {
-      setSearchResults(data);
+      setSearchResults(allAnimals);
     } else {
-      let results = data.filter((result) => {
+      let results = allAnimals.filter((result) => {
         return result.user
           .toLowerCase()
           .startsWith(searchTerm.toLowerCase().trim());
@@ -118,16 +128,12 @@ function Search(props) {
               {searchResults.map((person) => {
                 return (
                   <div className="search_results">
-                    <h2>{person.user}</h2>
+                    <h2>{person.user} - {person.pet.name}</h2>
                     <img
-                      src={require("../assets/lilcat.png")}
+                      src={person.img_data}
                       alt={`${person.user}'s pet, ${person.pet.name}`}
                       className="search_results_images"
                     />
-                    <Link to={"/petpage/0"}>
-                      <p>Go to Pet Page</p>
-                    </Link>{" "}
-                    {/* Will be a link to specific pet pages once that system gets set up */}
                   </div>
                 );
               })}

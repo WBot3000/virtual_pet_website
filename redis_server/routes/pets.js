@@ -120,6 +120,49 @@ router.post('/CreatePet', async(req, res) => {
     return res.status(200).json(name);
 });
 
+router.post('/GetPetImageFromOptions', async(req, res) => {
+  if (!req.body.petId || !req.body.options){
+    return res.status(400).json({message : `Invalid payload`});
+  }
+
+  let {options, petId} = req.body;
+
+  options.sort();
+
+  //image key is name + all options in sorted order
+  const image_key = petId+options.join('');
+  let image = await client.getAsync(image_key);
+  
+  let pet = allPets.find(e => {
+    return e.GetId() === petId;
+  })
+
+  //Validate the options
+  let validOptions = pet.GetCustomizableOptions();
+
+  for (option of req.body.options) {
+    const found = validOptions.find(e => {
+      return e.id === option;
+    });
+
+    if (!found) return res.status(400).json({error: "Invalid custom option"});
+  }
+  
+  //Check if image exists in redis
+  //Create image and put it in redis if not
+  if(!image){
+    try {
+      image = await pet.CreateImageFromOptions(options);
+    } catch (error) {
+      return res.status(400).json({error: "Image creation failed"});
+    }
+    
+    await client.setAsync(image_key, image);
+  }
+  
+  return res.status(200).json({img_data: image});
+});
+
 function exportHtml(html, options) {
 	return new Promise((resolve, reject) => {
 		wkhtmltopdf(html, options, (err, stream) => {
