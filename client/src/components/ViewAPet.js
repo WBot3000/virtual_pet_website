@@ -84,7 +84,7 @@ const ViewAPet = (props) => {
         style={{
           border: "5px solid",
           margin: "auto",
-          height: "900px",
+          height: "1000px",
           width: "50%",
         }}
       >
@@ -173,8 +173,6 @@ const ViewAPet = (props) => {
                 </Grid>
               </Grid>
             </Grid>
-            <br />
-            <br />
             <Grid item>
               <Grid container spacing={4} className={classes.buttonGroup}>
                 <Grid item xs={6}>
