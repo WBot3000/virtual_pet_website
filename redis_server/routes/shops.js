@@ -93,7 +93,7 @@ router.delete('/removeItem/:sid/:iid', async (req, res) => {
     if (!sid.match(/^[0-9a-z]+$/i) || !iid.match(/^[0-9a-z]+$/i)) {
         return res.status(400).json({ message: `Invalid id` });
     }
-
+    let shop=null;
     try {
         shop = await mongodb_DAL.shops.getShopById(sid);
     } catch (error) {

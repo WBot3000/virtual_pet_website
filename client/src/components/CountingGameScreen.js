@@ -8,8 +8,8 @@ function CountingGameScreen(props) {
     });
 
     return <div id="counting_game_screen">
-        {objArray.map(obj => {
-            return <img src={require(`../assets/counting_pics/${obj.shape}_${obj.color}.png`)} alt={`${obj.color} ${obj.shape}`}/>
+        {objArray.map((obj,index) => {
+            return <img src={require(`../assets/counting_pics/${obj.shape}_${obj.color}.png`)} alt={`${obj.color} ${obj.shape}`} key={index}/>
         })}
     </div>
 }
