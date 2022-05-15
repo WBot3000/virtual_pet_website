@@ -18,11 +18,11 @@ function CreateImage(options){
   let allOptions = [];
   if(options.includes('cap') ){
     const capPath = path.join(__dirname, `cap.png`);
-    allOptions.push.apply(allOptions, [capPath, '-gravity', 'Center', '-geometry', '2000x2000+500-900', '-composite'])
+    allOptions.push.apply(allOptions, [capPath, '-gravity', 'Center', '-geometry', '2000x2000+550-700', '-composite'])
   }
   if(options.includes('moustache') ){
     const stachePath = path.join(__dirname, `moustache.png`);
-    allOptions.push.apply(allOptions, [stachePath, '-gravity', 'Center', '-geometry', '2000x2000-200+200', '-composite'])
+    allOptions.push.apply(allOptions, [stachePath, '-gravity', 'Center', '-geometry', '2000x2000-350+350', '-composite'])
   }
 
   const directoryPath = path.join(__dirname, `image.png`);
