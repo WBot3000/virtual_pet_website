@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navigation from "../components/Navigation";
 
 import {
   Card,
@@ -122,6 +123,7 @@ const ViewAPet = (props) => {
       error = <h2 style={{color:'red', textAlign: 'center'}}>SOMETHING WENT WRONG!!</h2>
   }
   return <div>
+            <Navigation />
             {card}
             {error}
         </div>;
