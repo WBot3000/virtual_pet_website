@@ -56,7 +56,12 @@ router.get('/CheckIfDailyReward/:uid', async(req, res) => {
 
     //use difference in seconds to test
     if (differenceInMinutes >= 1){
-      await mongodb_DAL.users.changeMoney(uid, 100);
+      try {
+        await mongodb_DAL.users.changeMoney(uid, 100);
+      } catch (error) {
+        return res.status(400).json({error: "Failed to update money"});
+      }
+      
       await client.setAsync(key, Date());
       return res.status(200).json({reward: true, amount: 100});
     }
@@ -97,7 +102,13 @@ router.post('/OnGoogleLogin/:id', async(req, res) => {
     }
 
     //upate last signed in
-    let data = await mongodb_DAL.users.lastSigned(id);
+    let data = null;
+    try {
+      data = await mongodb_DAL.users.lastSigned(id);
+    } catch (error) {
+      return res.status(404).json({error: "Failed to get last sign in"});
+    }
+    
     
     //put it in redis
     let key = `lastSigned${id}`

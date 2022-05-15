@@ -106,7 +106,7 @@ const CreateAPet = (props) => {
 
   let nameError = null;
   if(errorOccured){
-    nameError = <Alert severity="error">You already have a pet with that name!</Alert>
+    nameError = <Alert severity="error">Woof! Your pet could not be created! Make sure you don't have any other pets with the same name!</Alert>
   }
 
   if(onPetCreated){
