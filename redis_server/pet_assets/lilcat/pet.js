@@ -4,7 +4,9 @@ const path = require('path');
 const id = 'lilcat';
 const species = "Cat";
 
-const customItems = [{screen_name: "Boss Glasses", image_name: "boss-glasses.png", id: "boss-glasses"},
+const customItems = [{screen_name: "Evil?", image_name: null, id: "evil"},
+  {screen_name: "Old Timey?", image_name: null, id: "old-timey"},
+  {screen_name: "Boss Glasses", image_name: "boss-glasses.png", id: "boss-glasses"},
   {screen_name: "Bow Tie", image_name: "bow-tie.png", id: "bow-tie"},];
 
 function CreateImage(options){
@@ -29,7 +31,14 @@ function CreateImage(options){
   const outputPath = path.join(__dirname, `output.png`);
   let magickOptions = [directoryPath];
   magickOptions.push.apply(magickOptions, allOptions);
-  magickOptions.push.apply(magickOptions, ['-resize', '2000x2000', outputPath]);
+  magickOptions.push.apply(magickOptions, ['-resize', '2000x2000']);
+  if(options.includes('evil')) {
+    magickOptions.push.apply(magickOptions, ['-negate'])
+  }
+  if(options.includes('old-timey')) {
+    magickOptions.push.apply(magickOptions, ['-sepia-tone', '95%'])
+  }
+  magickOptions.push.apply(magickOptions, [outputPath])
 
   return new Promise((resolve, reject) => {
     im.convert(magickOptions, function(err, stdout){
