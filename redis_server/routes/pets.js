@@ -85,16 +85,38 @@ router.post('/CreatePet', async(req, res) => {
     let pet = allPets.find(e => {
       return e.GetId() === petId;
     })
+
+    //Validate the options
+    let validOptions = pet.GetCustomizableOptions();
+
+    for (option of req.body.options) {
+      const found = validOptions.find(e => {
+        return e.id === option;
+      });
+
+      if (!found) return res.status(400).json({error: "Invalid custom option"});
+    }
+    
     //Check if image exists in redis
     //Create image and put it in redis if not
     if(!image){
-      image = pet.CreateImageFromOptions(options);
+      try {
+        image = await pet.CreateImageFromOptions(options);
+      } catch (error) {
+        return res.status(400).json({error: "Image creation failed"});
+      }
+      
       await client.setAsync(image_key, image);
     }
     
 
     //Add animal to user profile in mongodb
-    await mongodb_DAL.users.addPet(user, xss(name), petId, options);
+    try {
+      await mongodb_DAL.users.addPet(user, xss(name), petId, options);
+    } catch (error) {
+      return res.status(400).json({error: "You already have a pet with that name!"});
+    }
+    
     return res.status(200).json(name);
 });
 

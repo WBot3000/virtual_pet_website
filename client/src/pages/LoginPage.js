@@ -8,19 +8,21 @@ function LoginPage() {
     const [checkedUserLoggedIn, setCheckedLogin] = useState(false);
     const [userIsAuthenticated, setAuthenticated] = useState(false);
     const [currentUserID, setCurrentUserID] = useState(null);
+    const [displayName, setDisplayName] = useState(null);
     const [userExistsInMongo, setUserInMongo] = useState(false);
 
     useEffect(() => {
         console.log('on load useeffect');
         async function fetchData() {
-          if(currentUserID){
+          if(currentUserID && displayName){
               console.log(currentUserID);
-              await axios.post(`http://localhost:3001/OnGoogleLogin/${currentUserID}`);
+              console.log(displayName);
+              await axios.post(`http://localhost:3001/OnGoogleLogin/${currentUserID}/${displayName}`);
               setUserInMongo(true);
           }
         }
         fetchData();
-      }, [currentUserID]);
+      }, [currentUserID, displayName]);
 
     const onFinishedChecking = (finished) => {
         setCheckedLogin(true);
@@ -34,13 +36,17 @@ function LoginPage() {
         setCurrentUserID(id);
     }
 
+    const onSetDisplayName = (id) => {
+        setDisplayName(id);
+    }
+
     if (!checkedUserLoggedIn){
         return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
     else if (!userIsAuthenticated){
         return <div>
             <h2>Login to Virtual Pet</h2>
-            <Login userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></Login>
+            <Login userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID} setUserDisplayName={onSetDisplayName}></Login>
         </div>
     }
     else if (!userExistsInMongo){

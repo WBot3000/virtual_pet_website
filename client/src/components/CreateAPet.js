@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useParams, Navigate } from 'react-router-dom';
-import user from "../data_access_layer/user";
+import MuiAlert from "@material-ui/lab/Alert";
+
 import {
   Card,
   CardActionArea,
@@ -14,6 +15,12 @@ import {
 } from '@material-ui/core';
 
 import '../App.css';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} 
+                   variant="filled" {...props} />;
+}
+
 const useStyles = makeStyles({
   card: {
     maxWidth: 250,
@@ -49,11 +56,14 @@ const CreateAPet = (props) => {
   const classes = useStyles();
   const [inputError, setError] = useState(false);
   const [onPetCreated, setPetId] = useState(null);
+  const [errorOccured, setNameError] = useState(false);
+
   const buildCard = (datum) => {
+    console.log(datum)
     return (
         <Card className={classes.card} variant="outlined">
           <CardHeader className={classes.titleHead}/>
-          <CardMedia component='img' src={`${datum.petData.base64_img}`} />
+          <CardMedia component='img' src={`${datum.petData.base64_img}`} title={datum.petData.name}/>
   
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="span">
@@ -83,13 +93,22 @@ const CreateAPet = (props) => {
         setError(true);
         return;
     }
-
-    const { data } = await axios.post('http://localhost:3001/CreatePet', payload, {
+    try {
+      const { data } = await axios.post('http://localhost:3001/CreatePet', payload, {
       headers: { Accept: 'application/json' }
-    });
-    console.log(data);
-    setPetId(data);
+      });
+      console.log(data);
+      setPetId(data);
+    } catch (error) {
+      setNameError(error);
+    }
+    
   };
+
+  let nameError = null;
+  if(errorOccured){
+    nameError = <Alert severity="error">Woof! Your pet could not be created! Make sure you don't have any other pets with the same name!</Alert>
+  }
 
   if(onPetCreated){
     let path = `/viewpets/${onPetCreated}`
@@ -112,7 +131,7 @@ const CreateAPet = (props) => {
         <label>
         Name:
         <input pattern="[A-Za-z]+"
-            title="Aplha characters only!"
+            title="Alpha characters only!"
             id="name"
             name="name"
             type="text"
@@ -134,6 +153,7 @@ const CreateAPet = (props) => {
       error = <h2 style={{color:'red', textAlign: 'center'}}>STOP SUBMITTING WRONG STUFF!!</h2>
   }
   return <div>
+            {nameError}
             {card}
             {form}
             {error}
