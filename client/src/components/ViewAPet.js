@@ -84,7 +84,7 @@ const ViewAPet = (props) => {
         style={{
           border: "5px solid",
           margin: "auto",
-          height: "1000px",
+          height: "900px",
           width: "50%",
         }}
       >
@@ -176,25 +176,13 @@ const ViewAPet = (props) => {
             <br />
             <br />
             <Grid item>
-              <Grid container spacing={1} className={classes.buttonGroup}>
-                <Grid item xs={4}>
-                  <Button variant="contained">Feed</Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button variant="contained">Pet</Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button variant="contained">Wash</Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button variant="contained">Kick</Button>
-                </Grid>
-                <Grid item xs={4}>
+              <Grid container spacing={4} className={classes.buttonGroup}>
+                <Grid item xs={6}>
                   <Button variant="contained" onClick={() => getPDF()}>
                     PDF
                   </Button>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                   <Link to="/viewpets">
                     <Button variant="contained" color="error">
                       Back
