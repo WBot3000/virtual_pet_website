@@ -32,7 +32,7 @@ router.get('/user/:uid', async(req, res) => {
     return res.status(200).json(user);
 });
 
-router.get('/user/GetAllUsers', async(req, res) => {
+router.get('/GetAllUsers', async(req, res) => {
 
   let users = null;
   try {
@@ -40,6 +40,9 @@ router.get('/user/GetAllUsers', async(req, res) => {
   } catch (error) {
     return res.status(404).json({error: "Not Found"});
   }
+
+  //Remove gid to protect from attackers
+  users.map(e => delete e['gid']);
 
   return res.status(200).json(users);
 });
