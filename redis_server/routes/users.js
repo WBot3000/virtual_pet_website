@@ -88,9 +88,9 @@ router.get('/GetAllUserPetIds/:uid', async(req, res) => {
     return res.status(200).json(pets);
 });
 
-router.post('/OnGoogleLogin/:id', async(req, res) => {
-    const {id} = req.params;
-    if (!id.match(/^[0-9a-z]+$/i)){
+router.post('/OnGoogleLogin/:id/:displayName', async(req, res) => {
+    const {id, displayName} = req.params;
+    if (!id.match(/^[0-9a-z]+$/i) || !displayName.match(/^[ a-z]+$/i)){
       return res.status(400).json({message : `Invalid id`});
     }
 
@@ -98,7 +98,7 @@ router.post('/OnGoogleLogin/:id', async(req, res) => {
     try {
       user = await mongodb_DAL.users.getUserByGID(id);  
     } catch (error) {
-      user = await mongodb_DAL.users.createUser(id, id);
+      user = await mongodb_DAL.users.createUser(displayName, id);
     }
 
     //upate last signed in

@@ -13,10 +13,11 @@ function special(str) {
 }
 
 function validUsername(str) {
-    if(whitespace(str)){
-        return false;
-    }
-    else if(special(str)) {
+    //if(whitespace(str)){
+    //    return false;
+    //}
+    //else 
+    if(special(str)) {
         return false;
     }
     else{
