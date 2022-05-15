@@ -130,7 +130,7 @@ const CreateAPet = (props) => {
         <label>
         Name:
         <input pattern="[A-Za-z]+"
-            title="Aplha characters only!"
+            title="Alpha characters only!"
             id="name"
             name="name"
             type="text"
