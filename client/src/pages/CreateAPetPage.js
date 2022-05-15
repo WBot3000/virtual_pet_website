@@ -36,7 +36,7 @@ function CreateAPetPage() {
     return (
       <>
         <Navigation />
-        <h1 style={{ textAlign: "center" }}>Create A Pet!</h1>
+        <h1 style={{ textAlign: "center" }}>Choose your species!</h1>
         <CreateAPetList />
       </>
     );

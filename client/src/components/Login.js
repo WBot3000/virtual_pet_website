@@ -16,8 +16,10 @@ const Login = (props) => {
             .then((result) => {
                 console.log(auth);
                 console.log(result.user.uid);
+                console.log(result.user.displayName);
                 props.userIsAuthenticated(true);
                 props.setUserId(result.user.uid);
+                props.setUserDisplayName(result.user.displayName);
                 // This gives you a Google Access Token. You can use it to access the Google API.
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
