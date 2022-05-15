@@ -54,6 +54,8 @@ function ShopItemDisplay(props) {
     const iid = props.itemId;
     const [itemName, setItemName] = useState("");
     const [itemDes, setItemDes] = useState("");
+    const [itemPrice, setItemPrice]=useState("");
+    const [useCount,setUseCount]=useState("");
     const [error, setError] = useState();
     useEffect(() => {
         const fetchData = async () => {
@@ -61,6 +63,8 @@ function ShopItemDisplay(props) {
             if (data) {
                 setItemName(data.name);
                 setItemDes(data.description);
+                setItemPrice(data.price);
+                setUseCount(data.useCount);
             }
         };
         fetchData();
@@ -82,11 +86,18 @@ function ShopItemDisplay(props) {
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                         {itemDes}
+                        <br/>
+                        Price: {itemPrice}
+                        <br/>
+                        Use count: {useCount}
                     </Typography>
                     <br />
                     <Button variant='contained' onClick={async () => {
                         try {
-                            await axios.patch(`http://localhost:3001/AddToInv/${gid}/${iid}`);
+                            await axios.patch(`http://localhost:3001/AddToInv/${gid}/${iid}`).then((data)=>{
+                                props.updateUserMoney(data.data.userMoney);
+                            });
+                            
                             setError(<Alert>Item added to inventory</Alert>);
                         } catch (error) {
                             if (error.response.status === 400) {
