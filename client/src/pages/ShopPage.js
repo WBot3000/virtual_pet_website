@@ -1,9 +1,10 @@
 import Navigation from "../components/Navigation";
 import ShopFront from "../components/ShopFront";
 import axios from 'axios';
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Navigate, useParams } from 'react-router-dom';
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
+import user from "../data_access_layer/user"
 import { Grid } from "@mui/material";
 
 const ShopPage = () => {
@@ -13,6 +14,7 @@ const ShopPage = () => {
     const [currentUserID, setCurrentUserID] = useState(null);
     const [shopData, setShopData] = useState(null);
     const [errorOccured, setError] = useState(false);
+    const [userMoney, setUserMoney] = useState(0);
 
     let { id } = useParams();
     useEffect(() => {
@@ -21,6 +23,8 @@ const ShopPage = () => {
                 try {
                     let { data } = await axios.get(`http://localhost:3001/getShop/${id}`);
                     setShopData(data);
+                    let userData = await user.GetUser(currentUserID);
+                    setUserMoney(userData.data.money);
                     setLoading(false);
                 } catch (e) {
                     setError(true);
@@ -65,7 +69,7 @@ const ShopPage = () => {
             <>
                 <Navigation />
                 <Grid>
-                    <ShopFront data={shopData} userId={currentUserID}/>
+                    <ShopFront data={shopData} userId={currentUserID} money={userMoney} />
                 </Grid>
             </>
         );

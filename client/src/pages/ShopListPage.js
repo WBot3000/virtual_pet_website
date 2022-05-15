@@ -32,12 +32,10 @@ function ShopListPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(currentUserID);
       if (currentUser) {
         const { data } = await axios.get(
           `http://localhost:3001/CheckIfDailyReward/${currentUser.gid}`
         );
-        console.log(data);
         if (data.reward) {
           setDailyReward(data);
         }
@@ -84,7 +82,7 @@ function ShopListPage() {
         <Navigation />
         {reward}
         <Grid container>
-          <ShopsList />
+          <ShopsList/>
         </Grid>
       </>
     );

@@ -4,10 +4,16 @@ import ShopItemDisplay from './ShopItemDisplay';
 function ShopFront(props) {
     const [shopName, setShopName] = useState("");
     const [shopInv, setShopInv] = useState([]);
+    const [userMoney, setUserMoney]=useState(props.money);
     useEffect(() => {
         setShopName(props.data.name);
         setShopInv(props.data.inventory);
+        setUserMoney(props.money);
     }, []);
+
+    const updateUserMoney=(value)=>{
+        setUserMoney(value);
+    }
 
     function displayInventory () {
         if(shopInv.length == 0) {
@@ -16,10 +22,7 @@ function ShopFront(props) {
         else {
             return <>
                 {shopInv.map(item => {
-                    // return <div className="menu_item" key={item}>
-                    //     <ShopItemDisplay itemId={item}/>
-                    // </div>
-                    return <ShopItemDisplay itemId={item} key={item} userId={props.userId}/>
+                    return <ShopItemDisplay itemId={item} key={item} userId={props.userId} updateUserMoney={updateUserMoney} money={userMoney}/>
                 })}
             </>
             
@@ -28,6 +31,7 @@ function ShopFront(props) {
 
     return <>
         <h2>{shopName}</h2>
+        Your Money: ${userMoney}
         <div id="menu">
             {displayInventory()}
         </div>
