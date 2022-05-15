@@ -42,7 +42,7 @@ function InventoryPage() {
             <PetBox />
           </Grid>
           <Grid item xs={7}>
-            <Inventory />
+            <Inventory userId ={currentUserID}/>
           </Grid>
         </Grid>
       </>

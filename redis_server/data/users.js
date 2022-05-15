@@ -55,7 +55,7 @@ async function createUser(username, googleid) {
 	let newUser = {
         gid: googleid,
 		username: username,
-        money: 50,
+        money: 90,
         pets: [],
         inventory: [],
         lastSigned: Date()
@@ -66,10 +66,19 @@ async function createUser(username, googleid) {
 	if(added.insertCount === 0) {
 		throw({code: 500, message: "createUser: Could not add user."});
 	}
-	else{
+    else{
         const id = added.insertedId.toString();
+        try{
+            await addItemByName(googleid, "Sandwich");
+            await addItemByName(googleid, "Ball");
+            await addItemByName(googleid, "Soap");
+
+        }catch(e){
+            console.log(e);
+        }
         return await getUserById(id);
-	}
+    }
+    
 }
 
 //gets the user by the google id
@@ -430,9 +439,9 @@ async function deleteItem(gid, iid){
 }
 
 //adds item to user inventory with use count and subtracts item price from user wallet
-async function addItem(gid, iid){
-    if (!validate.validString(gid)) throw({code: 400, message: "addItem: gid must be a valid string."});
-    if (!validate.validString(iid)) throw({code: 400, message: "addItem: item id must be a valid string."});
+async function addItemById(gid, iid){
+    if (!validate.validString(gid)) throw({code: 400, message: "addItemById: gid must be a valid string."});
+    if (!validate.validString(iid)) throw({code: 400, message: "addItemById: item id must be a valid string."});
 
     const user = await getUserByGID(gid);
     const item = await itemData.getItemById(iid);
@@ -447,23 +456,47 @@ async function addItem(gid, iid){
       { $push: { inventory: {itemId:iid, useCount: uses} }}
     );
     if (updatedInfo.modifiedCount === 0) {
-      throw ({code: 500, message: "addItem: could not add item"});
+      throw ({code: 500, message: "addItemById: could not add item"});
+    }
+
+}
+
+//adds item to user inventory with use count and subtracts item price from user wallet
+async function addItemByName(gid, name){
+    if (!validate.validString(gid)) throw({code: 400, message: "addItemByName: gid must be a valid string."});
+    if (!validate.validString(name)) throw({code: 400, message: "addItemByName: item id must be a valid string."});
+
+    const user = await getUserByGID(gid);
+    const item = await itemData.getItemByName(name);
+    const uses = item.useCount;
+    const price = item.price*-1;
+
+    changeMoney(gid, price);
+  
+    const usersCollection = await users();
+    const updatedInfo = await usersCollection.updateOne(
+      { gid: gid },
+      { $push: { inventory: {itemId:item._id, useCount: uses} }}
+    );
+    if (updatedInfo.modifiedCount === 0) {
+      throw ({code: 500, message: "addItemByName: could not add item"});
     }
 
 }
 
 //get the item from user inventory
 async function getItem(gid, iid){
-
     if (!validate.validString(gid)) throw({code: 400, message: "getItem: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "getItem: item id must be a valid string."});
 
     const user = await getUserByGID(gid);
 
     let foundItem = false;
+    console.log(user.inventory);
     for(i = 0; i < user.inventory.length; i++){
-        if (user.inventory[i].itemId == iid) {
+        if (user.inventory[i].itemId === iid) {
             foundItem = true;
+            console.log(user.inventory[i]);
             return user.inventory[i];
         }
     }
@@ -526,7 +559,7 @@ async function useItem(gid, iid, petName) {
     const itemInfo = await itemData.getItemById(iid);
     const updated = await updateUses(gid, iid, -1);
 
-    if(updated.useCount <= 0){
+    if(updated.useCount === 0){
         deleteItem(gid, iid);
     }
 
@@ -561,7 +594,8 @@ module.exports = {
     changePants,
     changeShoes,
     deleteItem,
-    addItem,
+    addItemById,
+    addItemByName,
     getItem,
     getAllItems,
     useItem,

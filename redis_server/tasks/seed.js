@@ -6,7 +6,7 @@ const shops = data.shops;
 
 async function main() {
   const db = await dbConnection();
-  await db.dropDatabase();
+  //await db.dropDatabase();
 
   try {
     const toyStore = await shops.createShop("Toy Store");
