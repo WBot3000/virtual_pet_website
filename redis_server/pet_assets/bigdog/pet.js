@@ -4,7 +4,8 @@ const path = require('path');
 const id = 'bigdog';
 const species = "Dog";
 
-const customItems = [{screen_name: "Backwards Cap", image_name: "cap.png", id: "cap"},
+const customItems = [{screen_name: "Evil?", image_name: null, id: "evil"},
+  {screen_name: "Backwards Cap", image_name: "cap.png", id: "cap"},
   {screen_name: "Moustache", image_name: "moustache.png", id: "moustache"},];
 
 function CreateImage(options){
@@ -25,11 +26,16 @@ function CreateImage(options){
     allOptions.push.apply(allOptions, [stachePath, '-gravity', 'Center', '-geometry', '2000x2000-350+350', '-composite'])
   }
 
+
   const directoryPath = path.join(__dirname, `image.png`);
   const outputPath = path.join(__dirname, `output.png`);
   let magickOptions = [directoryPath];
   magickOptions.push.apply(magickOptions, allOptions);
-  magickOptions.push.apply(magickOptions, ['-resize', '2000x2000', outputPath]);
+  magickOptions.push.apply(magickOptions, ['-resize', '2000x2000']);
+  if(options.includes('evil')) {
+    magickOptions.push.apply(magickOptions, ['-negate'])
+  }
+  magickOptions.push.apply(magickOptions, [outputPath])
 
   return new Promise((resolve, reject) => {
     im.convert(magickOptions, function(err, stdout){
