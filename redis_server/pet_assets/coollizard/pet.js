@@ -19,11 +19,11 @@ function CreateImage(options){
   let allOptions = [];
   if(options.includes('wings') ){
     const wingsPath = path.join(__dirname, `wings.png`);
-    allOptions.push.apply(allOptions, [wingsPath, '-gravity', 'Center', '-geometry', '2000x2000+30+5', '-composite'])
+    allOptions.push.apply(allOptions, [wingsPath, '-gravity', 'Center', '-geometry', '2000x2000-750-900', '-composite'])
   }
   if(options.includes('horns') ){
     const hornsPath = path.join(__dirname, `horns.png`);
-    allOptions.push.apply(allOptions, [hornsPath, '-gravity', 'Center', '-geometry', '2000x2000+30+1000', '-composite'])
+    allOptions.push.apply(allOptions, [hornsPath, '-gravity', 'Center', '-geometry', '2000x2000+250-750', '-composite'])
   }
 
   const directoryPath = path.join(__dirname, `image.png`);
