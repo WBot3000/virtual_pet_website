@@ -17,13 +17,13 @@ function CreateImage(options){
   var im = require('imagemagick');
 
   let allOptions = [];
-  if(options.includes('bowler-hat') ){
-    const glassesPath = path.join(__dirname, `bowler-hat.png`);
-    allOptions.push.apply(allOptions, [glassesPath, '-gravity', 'Center', '-geometry', '2000x2000-500-1000', '-composite'])
-  }
   if(options.includes('monocle') ){
     const bowPath = path.join(__dirname, `monocle.png`);
-    allOptions.push.apply(allOptions, [bowPath, '-gravity', 'Center', '-geometry', '2000x2000+30+1000', '-composite'])
+    allOptions.push.apply(allOptions, [bowPath, '-gravity', 'Center', '-geometry', '2000x2000-500+100', '-composite'])
+  }
+  if(options.includes('bowler-hat') ){
+    const glassesPath = path.join(__dirname, `bowler-hat.png`);
+    allOptions.push.apply(allOptions, [glassesPath, '-gravity', 'Center', '-geometry', '2000x2000-500-1200', '-composite'])
   }
 
   const directoryPath = path.join(__dirname, `image.png`);
