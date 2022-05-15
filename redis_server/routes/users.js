@@ -76,7 +76,6 @@ router.get('/GetAllUserPetIds/:uid', async(req, res) => {
       return res.status(400).json({message : `Invalid uid`});
     }
 
-
     let pets = null;
 
     try {
@@ -162,6 +161,59 @@ router.get('/GetUserPet/:uid/:pid', async(req, res) => {
     }
     
     return res.status(200).json(pet);
+});
+
+router.get('/GetUserItems/:uid', async(req, res) => {
+  const {uid} = req.params;
+  if (!uid.match(/^[0-9a-z]+$/i)){
+    return res.status(400).json({message : `Invalid id`});
+  }
+
+  let items = null;
+  try {
+    items = await mongodb_DAL.users.getAllItems(uid);
+  } catch (error) {
+    return res.status(404).json({error: "Not Found"});
+  }
+  
+  return res.status(200).json({items});
+});
+
+router.get('/GetUserItem/:uid/:iid', async(req, res) => {
+  const {uid, iid} = req.params;
+  if (!uid.match(/^[0-9a-z]+$/i)){
+    return res.status(400).json({message : `Invalid id`});
+  }
+
+  let items = null;
+  try {
+    items = await mongodb_DAL.users.getItem(uid, iid);
+  } catch (error) {
+    return res.status(404).json({error: "Not Found"});
+  }
+  
+  return res.status(200).json({items});
+});
+
+router.post('/useItem', async(req, res) => {
+  const data = req.body;
+  if(data.uid === null || data.iid === null || data.petName === null){
+    return res.status(400).json({message : `Data cannot be null in request body`});
+  }
+
+  if (!data.uid.match(/^[0-9a-z]+$/i)){
+    return res.status(400).json({message : `Invalid id`});
+  }
+
+  const used = null;
+  try {
+    used = await mongodb_DAL.users.useItem(data.uid, data.iid, data.petName);
+    
+  } catch (error) {
+    return res.status(500).json({error: "Could not use item"});
+  }
+  
+  return res.status(200).json({used});
 });
   
 router.patch('/AddToInv/:gid/:iid',async (req,res)=>{

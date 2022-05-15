@@ -6,7 +6,7 @@ const shops = data.shops;
 
 async function main() {
   const db = await dbConnection();
-  await db.dropDatabase();
+  //await db.dropDatabase();
 
   try {
     // await users.createUser("belle", "123");
@@ -54,7 +54,6 @@ async function main() {
   } catch (e) {
     console.log(e);
   }
-
 }
 
 main();
