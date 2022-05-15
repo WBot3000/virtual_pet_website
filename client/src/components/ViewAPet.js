@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 const ViewAPet = (props) => {
   const classes = useStyles();
   const [inputError, setError] = useState(false);
-  const [pdfClick, changePdfClicked] = useState(false);
+  const [pdfClick, changePdfClicked] = useState(0);
 
   useEffect(() => {
     console.log("on load useeffect");
@@ -74,7 +74,7 @@ const ViewAPet = (props) => {
   }, [pdfClick]);
 
   function getPDF() {
-    changePdfClicked(!pdfClick);
+    changePdfClicked(pdfClick + 1);
   }
 
   const buildCard = (datum) => {
