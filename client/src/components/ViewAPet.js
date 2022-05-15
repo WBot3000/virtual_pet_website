@@ -207,6 +207,7 @@ const ViewAPet = (props) => {
         </CardContent>
       </Card>
     );
+
   };
 
   let card = buildCard(props.data);
