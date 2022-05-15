@@ -71,7 +71,6 @@ router.get('/GetAllUserPetIds/:uid', async(req, res) => {
       return res.status(400).json({message : `Invalid uid`});
     }
 
-
     let pets = null;
 
     try {
@@ -167,6 +166,27 @@ router.get('/GetUserItems/:uid', async(req, res) => {
   }
   
   return res.status(200).json({items});
+});
+
+router.post('/useItem', async(req, res) => {
+  const data = req.body;
+  if(data.uid === null || data.iid === null || data.petName === null){
+    return res.status(400).json({message : `Data cannot be null in request body`});
+  }
+
+  if (!data.uid.match(/^[0-9a-z]+$/i)){
+    return res.status(400).json({message : `Invalid id`});
+  }
+
+  const used = null;
+  try {
+    used = await mongodb_DAL.users.useItem(data.uid, data.iid, data.petName);
+    
+  } catch (error) {
+    return res.status(500).json({error: "Could not use item"});
+  }
+  
+  return res.status(200).json({used});
 });
   
 module.exports = router;

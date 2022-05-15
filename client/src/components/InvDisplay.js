@@ -1,17 +1,41 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function InvDisplay(props) {
-
+    const id = props.itemId;
     const [itemName, setItemName] = useState("");
+    const [itemDes, setItemDes] = useState("");
+    const [itemUse, setItemUse] = useState(0);
+    const [hap, setHap] = useState(0);
+    const [hun, setHun] = useState(0)
+    const [hyg, setHyg] = useState(0)
+
 
     useEffect(() => {
-        setItemName(props.itemName);
-    }, []);
+        const fetchData = async () => {
+            const { data } = await axios.get(`http://localhost:3001/item/${id}`);
+            //console.log(data);
+            if(data){
+                setItemName(data.name);
+                setItemDes(data.description);
+                setItemUse(data.useCount);
+                setHap(data.happinessChange);
+                setHun(data.hungerChange);
+                setHyg(data.hygieneChange);
+            }
+        };
+        fetchData();
+    })
 
     return (
         <>
             <img src={require('../assets/inv/placeholder.png')} />
             <p>{itemName}</p>
+            <p>{itemDes}</p>
+            <p>Uses: {itemUse}</p>
+            <p>Happiness: {hap}</p>
+            <p>Hunger: {hun}</p>
+            <p>Hygiene: {hyg}</p>
         </>
     );
 }
