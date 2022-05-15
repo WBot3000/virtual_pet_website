@@ -1,18 +1,22 @@
 import {useState, useEffect} from 'react';
 import InvDisplay from './InvDisplay';
 import axios from 'axios';
+import MuiAlert from "@material-ui/lab/Alert";
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function Inventory(props) {
     const [items, setItems] = useState([]);
     const [pet, setPet] = useState(null);
     const [pets, setPetList] = useState([]);
     const [change, setChange] = useState(0);
+    const [error, setError] = useState(null);
 
     //setGid(props.userId);
     const gid = props.userId;
     console.log(gid);
-    let error = null;
 
     async function itemAction(uid, iid, petName) {
         if(uid === null || iid === null)  {
@@ -20,11 +24,11 @@ function Inventory(props) {
             return null;
         }
         if(petName == null){
-            error = <p>Please select a pet</p>
+            setError("Please select a pet");
             return null;
         }
         else{
-            error = null;
+            setError(null);
         }
         try{
             return await axios.post(`http://localhost:3001/useItem`, 
@@ -37,6 +41,11 @@ function Inventory(props) {
             console.log(e);
             return null;
         }
+    }
+
+    let errorComponent = null;
+    if(error){
+        errorComponent = <Alert severity="error">{error}</Alert>
     }
 
     useEffect(() => {
@@ -67,10 +76,10 @@ function Inventory(props) {
     function consumeItem(iid) {
         console.log(gid, iid, pet);
         if(pet == null){
-            error = <p>Please select a pet</p>
+            setError("Please select a pet");
         }
         else{
-            error = null;
+            setError(null);
         }
         itemAction(gid, iid, pet);
         setChange(oldkey => oldkey+1);
@@ -84,21 +93,25 @@ function Inventory(props) {
     }
     else {
         return (
-            <div id="menu">
-                {items.map((item, idx) => {
-                    return <div className="menu_item" key={idx}>
-                        <InvDisplay uid = {gid} itemId={item.itemId}/>
-                            <p>Choose a Pet:</p>
-                            {error}
-                            <div>
-                            {pets.map((pet,petidx) => {
-                                return <button key={petidx} onClick={() => setPet(pet.petName)} >{pet.petName}</button>
-                            })}
-                            </div>
-                            <br></br>
-                        <button onClick={() => consumeItem(item.itemId)}>Use</button>
-                    </div>
-                })}
+            <div>
+                {errorComponent}
+                <div id="menu">
+                    
+                    {items.map((item, idx) => {
+                        return <div className="menu_item" key={idx}>
+                            <InvDisplay uid = {gid} itemId={item.itemId}/>
+                                <p>Choose a Pet:</p>
+                                {error}
+                                <div>
+                                {pets.map((pet,petidx) => {
+                                    return <button key={petidx} onClick={() => setPet(pet.petName)} >{pet.petName}</button>
+                                })}
+                                </div>
+                                <br></br>
+                            <button onClick={() => consumeItem(item.itemId)}>Use</button>
+                        </div>
+                    })}
+                </div>
             </div>
         );
     }

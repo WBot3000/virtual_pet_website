@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Navigation from "../components/Navigation";
+import { Link } from "react-router-dom";
 
 import {
   Card,
@@ -8,124 +10,208 @@ import {
   CardMedia,
   Grid,
   Typography,
-  makeStyles,
   CardHeader,
-  Button
-} from '@material-ui/core';
+  Button,
+  LinearProgress,
+} from "@mui/material";
+import { makeStyles } from "@material-ui/core";
 
-import '../App.css';
+import "../App.css";
 const useStyles = makeStyles({
-  card: {
-    maxWidth: 250,
-    height: 'auto',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderRadius: 5,
-    border: '1px solid #178577',
-    boxShadow: '0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);'
+  bar: {
+    height: "100%",
   },
-  titleHead: {
-    borderBottom: '1px solid #178577',
-    fontWeight: 'bold'
+  text: {
+    size: "20px",
   },
-  grid: {
-    flexGrow: 1,
-    flexDirection: 'row'
-  },
-  media: {
-    height: '100%',
-    width: '100%'
-  },
-  button: {
-    color: '#178577',
-    fontWeight: 'bold',
-    fontSize: 12
-  },
-  form: {
-    textAlign: 'center'
-}
 });
 const ViewAPet = (props) => {
   const classes = useStyles();
   const [inputError, setError] = useState(false);
-  const [pdfClick, changePdfClicked] = useState(false);
+  const [pdfClick, changePdfClicked] = useState(0);
 
   useEffect(() => {
-    console.log('on load useeffect');
+    console.log("on load useeffect");
     async function fetchData() {
-        if(pdfClick){
-          try {
-              console.log(props.data.petData);
-              console.log('props.data.petData');
-              let data = await axios.post(`http://localhost:3001/GetAnimalPdf`, {data: props.data.petData}, {
-                headers: { responseType:'arraybuffer' },  
-              })
-              
-              let binaryString = window.atob(data.data);
-
-              let binaryLen = binaryString.length;
-
-              let bytes = new Uint8Array(binaryLen);
-
-              for (let i = 0; i < binaryLen; i++) {
-                  let ascii = binaryString.charCodeAt(i);
-                  bytes[i] = ascii;
-              }
-
-              let blob = new Blob([bytes], {type: "application/pdf"});
-
-              let link = document.createElement('a');
-
-              link.href = window.URL.createObjectURL(blob);
-              link.download = 'pet.pdf';
-
-              link.click();
-            } catch (e) {
-              console.log(e)
-              setError(true);
+      if (pdfClick) {
+        try {
+          console.log(props.data.petData);
+          console.log("props.data.petData");
+          let data = await axios.post(
+            `http://localhost:3001/GetAnimalPdf`,
+            { data: props.data.petData },
+            {
+              headers: { responseType: "arraybuffer" },
             }
+          );
+
+          let binaryString = window.atob(data.data);
+
+          let binaryLen = binaryString.length;
+
+          let bytes = new Uint8Array(binaryLen);
+
+          for (let i = 0; i < binaryLen; i++) {
+            let ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+          }
+
+          let blob = new Blob([bytes], { type: "application/pdf" });
+
+          let link = document.createElement("a");
+
+          link.href = window.URL.createObjectURL(blob);
+          link.download = "pet.pdf";
+
+          link.click();
+        } catch (e) {
+          console.log(e);
+          setError(true);
         }
+      }
     }
     fetchData();
   }, [pdfClick]);
 
   function getPDF() {
-    changePdfClicked(!pdfClick);
+    changePdfClicked(pdfClick + 1);
   }
 
   const buildCard = (datum) => {
-    console.log(datum)
+    console.log(datum);
     return (
-        <Card className={classes.card} variant="outlined">
-          <CardHeader className={classes.titleHead}/>
-          <CardMedia component='img' src={`${datum.petData.img}`} />
-          <h3 style={{textAlign: 'center'}}>{datum.petData.petData.petName}</h3>
-          <CardContent>
-            <Typography variant="body2" color="textSecondary" component="span">
-            </Typography>
-          </CardContent>
-          <h3>Happiness: {datum.petData.petData.happiness}</h3>
-          <h3>Hunger: {datum.petData.petData.hunger}</h3>
-          <h3>Hygiene: {datum.petData.petData.hygiene}</h3>
-          <Button variant="contained">Feed</Button>
-          <Button variant="contained">Pet</Button>
-          <Button variant="contained">Wash</Button>
-          <Button variant="contained">Kick</Button>
-          <Button variant="contained" onClick={() => getPDF()}>PDF</Button>
-        </Card>
-      );
+      <Card
+        style={{
+          border: "5px solid",
+          margin: "auto",
+          height: "1000px",
+          width: "50%",
+        }}
+      >
+        <CardHeader
+          title={datum.petData.petData.petName}
+          style={{ textAlign: "center" }}
+          titleTypographyProps={{ variant: "h3" }}
+        />
+        <CardContent>
+          <CardMedia
+            src={`${datum.petData.img}`}
+            title={datum.petData.petData.petName}
+            component="img"
+            style={{ width: "50%", margin: "auto" }}
+          />
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "80vh" }}
+          >
+            {" "}
+            <br />
+            <br />
+            <Grid item>
+              <Grid style={{ width: "500px" }} container spacing={2}>
+                <Grid item xs={3}>
+                  <Typography variant="body1">Hunger: </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={datum.petData.petData.hunger}
+                    className={classes.bar}
+                    color="success"
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Typography variant="body1">
+                    {datum.petData.petData.hunger}%
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <br />
+            <Grid item>
+              <Grid style={{ width: "500px" }} container spacing={2}>
+                <Grid item xs={3}>
+                  <Typography variant="body1">Happiness: </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={datum.petData.petData.happiness}
+                    className={classes.bar}
+                    color="primary"
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Typography variant="body1">
+                    {datum.petData.petData.happiness}%
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <br />
+            <Grid item>
+              <Grid style={{ width: "500px" }} container spacing={2}>
+                <Grid item xs={3}>
+                  <Typography variant="body1">Hygiene: </Typography>
+                </Grid>
+                <Grid item xs={8}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={datum.petData.petData.hygiene}
+                    className={classes.bar}
+                    color="secondary"
+                  />
+                </Grid>
+                <Grid item xs={1}>
+                  <Typography variant="body1">
+                    {datum.petData.petData.hygiene}%
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container spacing={4} className={classes.buttonGroup}>
+                <Grid item xs={6}>
+                  <Button variant="contained" onClick={() => getPDF()}>
+                    PDF
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Link to="/viewpets">
+                    <Button variant="contained" color="error">
+                      Back
+                    </Button>
+                  </Link>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+    );
+
   };
 
   let card = buildCard(props.data);
   let error = null;
-  if(inputError){
-      error = <h2 style={{color:'red', textAlign: 'center'}}>SOMETHING WENT WRONG!!</h2>
+  if (inputError) {
+    error = (
+      <h2 style={{ color: "red", textAlign: "center" }}>
+        SOMETHING WENT WRONG!!
+      </h2>
+    );
   }
-  return <div>
-            {card}
-            {error}
-        </div>;
-
+  return (
+    <div>
+      <Navigation />
+      {card}
+      {error}
+    </div>
+  );
 };
 
 export default ViewAPet;

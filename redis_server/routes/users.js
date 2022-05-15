@@ -140,7 +140,7 @@ router.get('/GetPetImage/:uid/:pid', async(req, res) => {
     //Check if image exists in redis
     //Create image and put it in redis if not
     if(!image){
-      image = petObj.CreateImageFromOptions(options);
+      image = await petObj.CreateImageFromOptions(options);
       await client.setAsync(image_key, image);
     }
     

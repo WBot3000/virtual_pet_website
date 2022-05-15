@@ -120,12 +120,24 @@ router.post('/CreatePet', async(req, res) => {
     return res.status(200).json(name);
 });
 
+function exportHtml(html, options) {
+	return new Promise((resolve, reject) => {
+		wkhtmltopdf(html, options, (err, stream) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
 router.post('/GetAnimalPdf', async(req, res) => {
   if (!req.body.data){
     return res.status(400).json({message : `Invalid payload`});
   }
   let petData = req.body.data;
-  wkhtmltopdf(`<div>
+  await exportHtml(`<div>
   <h1>Your Pet: ${petData.petData.petName} | Happiness:${petData.petData.happiness} | Hunger:${petData.petData.hunger} | Hygiene:${petData.petData.hygiene}</h1>
   <img src="${petData.img}" alt="pet" />
   </div>`, { output: 'out.pdf' });
