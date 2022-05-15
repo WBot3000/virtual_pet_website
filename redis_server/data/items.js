@@ -38,6 +38,7 @@ async function getItemByName(name) {
 }
 
 async function createItem(name, description, price, useCount, happinessChange, hungerChange, hygieneChange){
+    if(arguments.length!=7) throw ({code :400, message:"createItem: Provide all details to create item"});
     if(!validate.validString(name)) throw({code: 400, message: "createItem: item name is not a valid string"});
     if(!validate.validString(description)) throw({code: 400, message: "createItem: item des is not a valid string"});
 

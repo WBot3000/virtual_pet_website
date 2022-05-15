@@ -9,6 +9,7 @@ import ViewPetsPage from "./pages/ViewPetsPage";
 import ViewAPetPage from "./pages/ViewAPetPage";
 import InventoryPage from "./pages/InventoryPage";
 import ShopListPage from "./pages/ShopListPage";
+import ShopPage from "./pages/ShopPage";
 import GameListPage from "./pages/GameListPage";
 import CountingGamePage from "./pages/CountingGamePage";
 import RPSPage from "./pages/RPSPage";
@@ -32,10 +33,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/createapet" element={<CreateAPetPage />} />
           <Route path="/createapet/:id" element={<PetPage />} />
-          <Route path="/viewpets" element={<ViewPetsPage/>}/>
-          <Route path="/viewpets/:id" element={<ViewAPetPage/>}/>
+          <Route path="/viewpets" element={<ViewPetsPage />} />
+          <Route path="/viewpets/:id" element={<ViewAPetPage />} />
           <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/shops" element={<ShopListPage />} />
+          <Route path="/shop/:id" element={<ShopPage />} />
           <Route path="/games" element={<GameListPage />} />
           <Route path="/games/counting" element={<CountingGamePage />} />
           <Route path="/games/rps" element={<RPSPage />} />

@@ -11,16 +11,16 @@ bluebird.promisifyAll(redis.Multi.prototype);
 
 const mongodb_DAL = require('../data/index');
 
-router.get('/item/:uid', async(req, res) => {
-    const {uid} = req.params;
+router.get('/item/:iid', async(req, res) => {
+    const {iid} = req.params;
     //uid is alphanumeric
-    if (!uid.match(/^[0-9a-z]+$/i)){
+    if (!iid.match(/^[0-9a-z]+$/i)){
       return res.status(400).json({message : `Invalid uid`});
     }
 
     let item = null;
     try {
-      item = await mongodb_DAL.items.getItemById(uid);
+      item = await mongodb_DAL.items.getItemById(iid);
     } catch (error) {
       return res.status(404).json({error: "Not Found"});
     }

@@ -42,7 +42,7 @@ function CountingGamePage() {
             <PetBox />
           </Grid>
           <Grid item xs={7}>
-            <CountingGame />
+            <CountingGame userId={currentUserID}/>
           </Grid>
         </Grid>
       </>

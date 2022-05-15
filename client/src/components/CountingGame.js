@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import CountingGameScreen from "./CountingGameScreen";
 import { Paper } from "@mui/material";
+import axios from "axios";
 
-function CountingGame() {
+
+function CountingGame(props) {
   //const [gameState, setGameState] = useState("");
   const [objArray, setObjArray] = useState([]);
   const [shapeToFind, setShapeToFind] = useState("circle");
@@ -43,9 +45,17 @@ function CountingGame() {
 
   function responseMessage() {
     if (responseCorrect) {
-      return "Correct!";
+      return "Correct! You won PetBucks";
     } else {
       return "Incorrect...";
+    }
+  }
+
+  async function addPetBucks(value){
+    try{
+      await axios.patch(`http://localhost:3001/AddPetBucks/${props.userId}`,{money:value});
+    }catch(error){
+      console.log(error.response.data.message);
     }
   }
 
@@ -60,6 +70,7 @@ function CountingGame() {
         0
       );
       setScore(scoreCalculation);
+      addPetBucks(20);
     } else {
       setPenaltyCount(penaltyCount + 1);
     }

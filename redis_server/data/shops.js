@@ -95,22 +95,25 @@ async function deleteStock(shopId, itemId){
 //get the item from shop inventory, returns item id
 async function getShopItem(shopId, itemId){
 
-    if (!validate.validString(shopId)) throw({code: 400, message: "getShopItem: gid must be a valid string."});
+    if (!validate.validString(shopId)) throw({code: 400, message: "getShopItem: shop id must be a valid string."});
     if (!validate.validString(itemId)) throw({code: 400, message: "getShopItem: item id must be a valid string."});
 
-    const shop = await getShopByGID(gid);
-
+    const shop = await getShopById(shopId);
     let foundItem = false;
-    for(i = 0; i < shop.inventory.length; i++){
-        if (shop.inventory[i].itemId == iid) {
-            foundItem = true;
-            return shop.inventory[i];
+    shop.inventory.map((i)=>{
+        if(i==itemId){
+            foundItem=true;
         }
-    }
+    });
     if(!foundItem){
         throw({code: 404, message: "getShopItem: item not found"});
     }
 
+    const item=await itemData.getItemById(itemId);
+    if(!item){
+        throw({code: 404, message: "getShopItem: item not found"});
+    }
+    return item;
 }
 
 module.exports = {

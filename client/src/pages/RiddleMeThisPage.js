@@ -42,7 +42,7 @@ function RiddleMeThisPage() {
             <PetBox />
           </Grid>
           <Grid item xs={7}>
-            <RiddleMeThis />
+            <RiddleMeThis userId={currentUserID}/>
           </Grid>
         </Grid>
       </>

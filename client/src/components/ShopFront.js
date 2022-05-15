@@ -1,37 +1,33 @@
 import {useState, useEffect} from 'react';
+import ShopItemDisplay from './ShopItemDisplay';
 
 function ShopFront(props) {
     const [shopName, setShopName] = useState("");
-    const [shopQuote, setShopQuote] = useState("Welcome!");
     const [shopInv, setShopInv] = useState([]);
-
     useEffect(() => {
-        setShopName(props.shopName);
-        let quoteIdx = Math.floor(Math.random() * props.shopQuotes.length);
-        setShopQuote(props.shopQuotes[quoteIdx]);
-        setShopInv(props.shopInv);
+        setShopName(props.data.name);
+        setShopInv(props.data.inventory);
     }, []);
 
-    function displayInventory() {
+    function displayInventory () {
         if(shopInv.length == 0) {
             return <p>The store is empty...</p>;
         }
         else {
             return <>
                 {shopInv.map(item => {
-                    return <div className="menu_item">
-                        <img src={require('../assets/inv/placeholder.png')} />
-                        <p>{item.name}</p>
-                        <button>Buy Item</button>
-                    </div>
+                    // return <div className="menu_item" key={item}>
+                    //     <ShopItemDisplay itemId={item}/>
+                    // </div>
+                    return <ShopItemDisplay itemId={item} key={item} userId={props.userId}/>
                 })}
             </>
+            
         }
     }
 
     return <>
         <h2>{shopName}</h2>
-        <p>{shopQuote}</p>
         <div id="menu">
             {displayInventory()}
         </div>

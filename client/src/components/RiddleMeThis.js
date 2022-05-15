@@ -1,4 +1,5 @@
 import {useState, useEffect} from "react";
+import axios from 'axios';
 
 function RiddleMeThis() {
     const riddles = [`"I have two coins that add up to 30 cents. One of them is not a nickel. What are the two coins?" (Just write the two coins, with just a space in between them)`,
@@ -18,12 +19,21 @@ function RiddleMeThis() {
         setAns(correctAnswers[riddleIdx]);
     }, [riddleIdx]);
 
+    async function addPetBucks(value){
+        try{
+          await axios.patch(`http://localhost:3001/AddPetBucks/${props.userId}`,{money:value});
+        }catch(error){
+          console.log(error.response.data.message);
+        }
+      }
+
     function handleSubmit(e) {
         e.preventDefault();
         let fixedAnswer = userAnswer.trim().toLowerCase();
         for(let i = 0; i < ans.length; i++) {
             if(fixedAnswer == ans[i]) {
                 setCorrect(true);
+                addPetBucks(30);
                 return;
             }
         }
@@ -52,7 +62,7 @@ function RiddleMeThis() {
             <p>That's not it! Try again!</p>
         }
         {correct === true &&
-            <p>You got it! {correctBlurb[riddleIdx]} Great job!</p>
+            <p>You got it! {correctBlurb[riddleIdx]} Great job! You won PetBucks</p>
         }
     </>
 }

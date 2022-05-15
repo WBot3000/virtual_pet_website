@@ -216,4 +216,33 @@ router.post('/useItem', async(req, res) => {
   return res.status(200).json({used});
 });
   
+router.patch('/AddToInv/:gid/:iid',async (req,res)=>{
+  const {gid, iid} = req.params;
+    if (!gid.match(/^[0-9a-z]+$/i) || !iid.match(/^[0-9a-z]+$/i)){
+      return res.status(400).json({message : `Invalid id`});
+    }
+    try{
+      const user=await mongodb_DAL.users.getUserByGID(gid);
+      const item=await mongodb_DAL.items.getItemById(iid);
+      if(user.money<item.price){
+        return res.status(400).json({message:'Not enough money'});
+      }else{
+        await mongodb_DAL.users.addItem(gid,iid);
+      }
+    }catch(error){
+      return res.status(400).json({message : `Unable to complete transaction`});
+    }
+});
+
+router.patch('/AddPetBucks/:gid',async(req,res)=>{
+  const gid=req.params.gid;
+  if (!gid.match(/^[0-9a-z]+$/i)){
+    return res.status(400).json({message : `Invalid id`});
+  }
+  try{
+    await mongodb_DAL.users.changeMoney(gid,req.body.money);
+  }catch(error){
+    return res.status(400).json({message : `Unable to complete transaction`});
+  }
+});
 module.exports = router;
