@@ -38,9 +38,6 @@ function CountingGamePage() {
       <>
         <Navigation />
         <Grid container>
-          <Grid item xs={5}>
-            <PetBox />
-          </Grid>
           <Grid item xs={7}>
             <CountingGame userId={currentUserID}/>
           </Grid>

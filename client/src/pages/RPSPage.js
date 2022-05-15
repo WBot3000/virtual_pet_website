@@ -38,9 +38,6 @@ function RPSPage() {
       <>
         <Navigation />
         <Grid container>
-          <Grid item xs={5}>
-            <PetBox />
-          </Grid>
           <Grid item xs={7}>
             <RPS userId={currentUserID}/>
           </Grid>
