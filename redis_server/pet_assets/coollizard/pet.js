@@ -1,8 +1,8 @@
 //https://techpiezo.com/linux/install-imagemagick-in-ubuntu-20-04-lts/
 const fs = require('fs');
 const path = require('path');
-const id = 'lilcat';
-const species = "Cat";
+const id = 'coollizard';
+const species = "Lizard";
 
 const customItems = [{screen_name: "Evil?", image_name: null, id: "evil"},
   {screen_name: "Horns", image_name: "horns.png", id: "horns"},
