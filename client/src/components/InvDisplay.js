@@ -30,7 +30,7 @@ function InvDisplay(props) {
 
     return (
         <>
-            <img src={require(`../assets/store_pics/${itemName}.png`)} title={props.itemName} />
+            {itemName !== "" ? <img src={require(`../assets/store_pics/${itemName}.png`)} /> : <img src={require(`../assets/inv/placeholder.png`)} />}
             <p>{itemName}</p>
             <p>{itemDes}</p>
             <p>Uses: {itemUse}</p>
