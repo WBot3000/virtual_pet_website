@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function InvDisplay(props) {
-    const id = props.itemId;
+    const iid = props.itemId;
+    const uid = props.uid;
     const [itemName, setItemName] = useState("");
     const [itemDes, setItemDes] = useState("");
     const [itemUse, setItemUse] = useState(0);
@@ -13,12 +14,12 @@ function InvDisplay(props) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const { data } = await axios.get(`http://localhost:3001/item/${id}`);
-            //console.log(data);
+            const { data } = await axios.get(`http://localhost:3001/item/${iid}`);
+            const data2 = await axios.get(`http://localhost:3001/GetUserItem/${uid}/${iid}`)
             if(data){
                 setItemName(data.name);
                 setItemDes(data.description);
-                setItemUse(data.useCount);
+                setItemUse(data2.data.items.useCount);
                 setHap(data.happinessChange);
                 setHun(data.hungerChange);
                 setHyg(data.hygieneChange);

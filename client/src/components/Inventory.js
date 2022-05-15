@@ -8,19 +8,24 @@ function Inventory(props) {
     const [items, setItems] = useState([]);
     const [pet, setPet] = useState(null);
     const [pets, setPetList] = useState([]);
-    //const [gid, setGid] = useState(null);
+    const [change, setChange] = useState(0);
 
     //setGid(props.userId);
     const gid = props.userId;
     console.log(gid);
+    let error = null;
 
     async function itemAction(uid, iid, petName) {
-        if(uid === null || iid === null) {
+        if(uid === null || iid === null)  {
             console.log("Error: uid or iid is null");
             return null;
         }
-        if(petName === null){
-            return <Alert variant="warning"> Please select a pet to use the item on!</Alert>
+        if(petName == null){
+            error = <p>Please select a pet</p>
+            return null;
+        }
+        else{
+            error = null;
         }
         try{
             return await axios.post(`http://localhost:3001/useItem`, 
@@ -30,7 +35,7 @@ function Inventory(props) {
                 petName: petName
             });
         }catch(e){
-            console.log("error fetching items");
+            console.log(e);
             return null;
         }
     }
@@ -38,36 +43,41 @@ function Inventory(props) {
     useEffect(() => {
         const fetchData = async () => {
             const { data } = await axios.get(`http://localhost:3001/GetAllUserPetIds/${gid}`)
-            console.log(data);
+            //console.log(data);
             if(data){
                 setPetList(data);
             }
         };
         fetchData();
-    },[gid])
+    },[gid, change])
 
 
     useEffect(() => {
         const fetchData = async () => {
-            if(gid) {
-                const { data } = await axios.get(`http://localhost:3001/getUserItems/${gid}`);
-                if(data){
-                    setItems(data.items);
-                }
+            const { data } = await axios.get(`http://localhost:3001/getUserItems/${gid}`);
+            if(data){
+                setItems(data.items);
             }
         };
         fetchData();
-    },[gid])
+    },[gid,change])
 
     console.log("items: ", items);
     console.log("pets: ", pets);
     
     function consumeItem(iid) {
         console.log(gid, iid, pet);
+        if(pet == null){
+            error = <p>Please select a pet</p>
+        }
+        else{
+            error = null;
+        }
         itemAction(gid, iid, pet);
+        setChange(oldkey => oldkey+1);
     }
 
-
+    console.log(error);
     if(items.length === 0) {
         return (
             <div id="inventory">You have no items! Buy some at the shops!</div>
@@ -78,11 +88,12 @@ function Inventory(props) {
             <div id="menu">
                 {items.map((item, idx) => {
                     return <div className="menu_item" key={item.id}>
-                        <InvDisplay itemId={item.itemId}/>
+                        <InvDisplay uid = {gid} itemId={item.itemId}/>
                             <p>Choose a Pet:</p>
+                            {error}
                             <div>
                             {pets.map((pet,petidx) => {
-                                return <button onClick={() => setPet(pet.petName)} >{pet.petName}</button>
+                                return <button key={petidx} onClick={() => setPet(pet.petName)} >{pet.petName}</button>
                             })}
                             </div>
                             <br></br>

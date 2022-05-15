@@ -486,16 +486,17 @@ async function addItemByName(gid, name){
 
 //get the item from user inventory
 async function getItem(gid, iid){
-
     if (!validate.validString(gid)) throw({code: 400, message: "getItem: gid must be a valid string."});
     if (!validate.validString(iid)) throw({code: 400, message: "getItem: item id must be a valid string."});
 
     const user = await getUserByGID(gid);
 
     let foundItem = false;
+    console.log(user.inventory);
     for(i = 0; i < user.inventory.length; i++){
-        if (user.inventory[i].itemId == iid) {
+        if (user.inventory[i].itemId === iid) {
             foundItem = true;
+            console.log(user.inventory[i]);
             return user.inventory[i];
         }
     }
@@ -558,7 +559,7 @@ async function useItem(gid, iid, petName) {
     const itemInfo = await itemData.getItemById(iid);
     const updated = await updateUses(gid, iid, -1);
 
-    if(updated.useCount <= 0){
+    if(updated.useCount === 0){
         deleteItem(gid, iid);
     }
 
