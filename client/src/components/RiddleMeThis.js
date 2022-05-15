@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import axios from 'axios';
 
-function RiddleMeThis() {
+function RiddleMeThis(props) {
     const riddles = [`"I have two coins that add up to 30 cents. One of them is not a nickel. What are the two coins?" (Just write the two coins, with just a space in between them)`,
     `What walks on four legs in the morning, two legs in the afternoon, and three legs in the evening?`,
     `The more you have of it, the less you see. What am I referencing?`]
