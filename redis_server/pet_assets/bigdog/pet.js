@@ -5,6 +5,7 @@ const id = 'bigdog';
 const species = "Dog";
 
 const customItems = [{screen_name: "Evil?", image_name: null, id: "evil"},
+  {screen_name: "Old Timey?", image_name: null, id: "old-timey"},
   {screen_name: "Backwards Cap", image_name: "cap.png", id: "cap"},
   {screen_name: "Moustache", image_name: "moustache.png", id: "moustache"},];
 
@@ -34,6 +35,9 @@ function CreateImage(options){
   magickOptions.push.apply(magickOptions, ['-resize', '2000x2000']);
   if(options.includes('evil')) {
     magickOptions.push.apply(magickOptions, ['-negate'])
+  }
+  if(options.includes('old-timey')) {
+    magickOptions.push.apply(magickOptions, ['-sepia-tone', '95%'])
   }
   magickOptions.push.apply(magickOptions, [outputPath])
 

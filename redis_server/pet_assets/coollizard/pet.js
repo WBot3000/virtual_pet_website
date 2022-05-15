@@ -5,6 +5,7 @@ const id = 'coollizard';
 const species = "Lizard";
 
 const customItems = [{screen_name: "Evil?", image_name: null, id: "evil"},
+  {screen_name: "Old Timey?", image_name: null, id: "old-timey"},
   {screen_name: "Horns", image_name: "horns.png", id: "horns"},
   {screen_name: "Wings", image_name: "wings.png", id: "wings"},];
 
@@ -33,6 +34,9 @@ function CreateImage(options){
   magickOptions.push.apply(magickOptions, ['-resize', '2000x2000']);
   if(options.includes('evil')) {
     magickOptions.push.apply(magickOptions, ['-negate'])
+  }
+  if(options.includes('old-timey')) {
+    magickOptions.push.apply(magickOptions, ['-sepia-tone', '95%'])
   }
   magickOptions.push.apply(magickOptions, [outputPath])
 
