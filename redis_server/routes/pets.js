@@ -95,7 +95,7 @@ router.post('/CreatePet', async(req, res) => {
 
     //Add animal to user profile in mongodb
     try {
-      //await mongodb_DAL.users.addPet(user, xss(name), petId, options);
+      await mongodb_DAL.users.addPet(user, xss(name), petId, options);
     } catch (error) {
       return res.status(400).json({error: "You already have a pet with that name!"});
     }
