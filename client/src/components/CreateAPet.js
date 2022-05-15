@@ -59,10 +59,11 @@ const CreateAPet = (props) => {
   const [errorOccured, setNameError] = useState(false);
 
   const buildCard = (datum) => {
+    console.log(datum)
     return (
         <Card className={classes.card} variant="outlined">
           <CardHeader className={classes.titleHead}/>
-          <CardMedia component='img' src={`${datum.petData.base64_img}`} />
+          <CardMedia component='img' src={`${datum.petData.base64_img}`} title={datum.petData.name}/>
   
           <CardContent>
             <Typography variant="body2" color="textSecondary" component="span">
