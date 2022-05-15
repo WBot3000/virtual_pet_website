@@ -1,7 +1,6 @@
 import {useState, useEffect} from 'react';
 import InvDisplay from './InvDisplay';
 import axios from 'axios';
-import Alert from 'react-bootstrap/Alert';
 
 
 function Inventory(props) {
@@ -87,7 +86,7 @@ function Inventory(props) {
         return (
             <div id="menu">
                 {items.map((item, idx) => {
-                    return <div className="menu_item" key={item.id}>
+                    return <div className="menu_item" key={idx}>
                         <InvDisplay uid = {gid} itemId={item.itemId}/>
                             <p>Choose a Pet:</p>
                             {error}
