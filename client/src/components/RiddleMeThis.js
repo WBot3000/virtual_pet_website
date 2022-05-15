@@ -1,10 +1,19 @@
 import {useState} from "react";
+import axios from 'axios';
 
-function RiddleMeThis() {
+function RiddleMeThis(props) {
     const [userAnswer, setUserAnswer] = useState("");
     const [correct, setCorrect] = useState(null);
 
     const correctAnswers = ["nickel quarter", "quarter nickel"];
+
+    async function addPetBucks(value){
+        try{
+          await axios.patch(`http://localhost:3001/AddPetBucks/${props.userId}`,{money:value});
+        }catch(error){
+          console.log(error.response.data.message);
+        }
+      }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -12,6 +21,7 @@ function RiddleMeThis() {
         for(let i = 0; i < correctAnswers.length; i++) {
             if(fixedAnswer == correctAnswers[i]) {
                 setCorrect(true);
+                addPetBucks(30);
                 return;
             }
             setCorrect(false);
@@ -41,7 +51,7 @@ function RiddleMeThis() {
             <p>That's not it! Try again!</p>
         }
         {correct === true &&
-            <p>You got it! One coin isn't a nickel, but the other one is! Great job!</p>
+            <p>You got it! One coin isn't a nickel, but the other one is! Great job! You won PetBucks</p>
         }
     </>
 }

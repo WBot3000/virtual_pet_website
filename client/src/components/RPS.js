@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
+import axios from 'axios';
 
-function RPS() {
+function RPS(props) {
     // const [gameStart, setGameStart] = useState(false);
     // const [maxWager, setMaxWager] = useState(0);
     // const [wager, setWager] = useState(0);
@@ -9,6 +10,13 @@ function RPS() {
     const [alreadyPlayed, setAlreadyPlayed] = useState(false);
     const [resultMessage, setResultMessage] = useState("You guys tied!");
 
+    async function addPetBucks(value){
+        try{
+          await axios.patch(`http://localhost:3001/AddPetBucks/${props.userId}`,{money:value});
+        }catch(error){
+          console.log(error.response.data.message);
+        }
+      }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -24,7 +32,8 @@ function RPS() {
                 setResultMessage("You guys tied!");
             }
             else if((playerSelect == "rock" && cpuChoice == "scissors") || (playerSelect == "paper" && cpuChoice == "rock") || (playerSelect == "scissors" && cpuChoice == "paper")) {
-                setResultMessage("You won!");
+                setResultMessage("You won! You received PetBucks");
+                addPetBucks(10);
             }
             else {
                 setResultMessage("You lost...");

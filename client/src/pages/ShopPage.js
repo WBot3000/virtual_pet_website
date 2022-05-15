@@ -28,7 +28,7 @@ const ShopPage = () => {
             }
         }
         fetchData();
-    }, [id,currentUserID]);
+    }, [id, currentUserID]);
 
     const onFinishedChecking = (finished) => {
         setCheckedLogin(true);
@@ -42,12 +42,12 @@ const ShopPage = () => {
         setCurrentUserID(id)
     }
 
-    if (!checkedUserLoggedIn){
+    if (!checkedUserLoggedIn) {
         return <CheckUserLoggedIn onFinished={onFinishedChecking} userIsAuthenticated={onSetAuthenticated} setUserId={onSetCurrentUserID}></CheckUserLoggedIn>
     }
-    else if (!userIsAuthenticated){
+    else if (!userIsAuthenticated) {
         return <Navigate to="/"></Navigate>
-    }else if (errorOccured) {
+    } else if (errorOccured) {
         return (
             <div>
                 <Navigate to="/" />
@@ -63,10 +63,10 @@ const ShopPage = () => {
     } else {
         return (
             <>
-            <Navigation/>
-            <Grid>
-            <ShopFront data={shopData}/>
-            </Grid>
+                <Navigation />
+                <Grid>
+                    <ShopFront data={shopData} userId={currentUserID}/>
+                </Grid>
             </>
         );
     }

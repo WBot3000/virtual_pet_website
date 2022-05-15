@@ -130,7 +130,6 @@ router.get('/getShopItem/:sid/:iid',async(req,res)=>{
     let item;
     try{
         item=await mongodb_DAL.shops.getShopItem(sid,iid);
-        console.log(item);
     }catch(error){
         return res.status(404).json({ error: "Item not Found" });
     }

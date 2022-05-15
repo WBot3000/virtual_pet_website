@@ -42,7 +42,7 @@ function RPSPage() {
             <PetBox />
           </Grid>
           <Grid item xs={7}>
-            <RPS />
+            <RPS userId={currentUserID}/>
           </Grid>
         </Grid>
       </>
