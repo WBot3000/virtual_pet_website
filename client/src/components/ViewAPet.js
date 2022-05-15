@@ -97,7 +97,7 @@ const ViewAPet = (props) => {
   const buildCard = (datum) => {
     console.log(datum)
     return (
-        <Card className={classes.card} variant="outlined">
+        <Card style={{textAlign: 'center'}} className={classes.card} variant="outlined">
           <CardHeader className={classes.titleHead}/>
           <CardMedia component='img' src={`${datum.petData.img}`} />
           <h3 style={{textAlign: 'center'}}>{datum.petData.petData.petName}</h3>
@@ -108,10 +108,6 @@ const ViewAPet = (props) => {
           <h3>Happiness: {datum.petData.petData.happiness}</h3>
           <h3>Hunger: {datum.petData.petData.hunger}</h3>
           <h3>Hygiene: {datum.petData.petData.hygiene}</h3>
-          <Button variant="contained">Feed</Button>
-          <Button variant="contained">Pet</Button>
-          <Button variant="contained">Wash</Button>
-          <Button variant="contained">Kick</Button>
           <Button variant="contained" onClick={() => getPDF()}>PDF</Button>
         </Card>
       );
