@@ -1,12 +1,12 @@
 //https://techpiezo.com/linux/install-imagemagick-in-ubuntu-20-04-lts/
 const fs = require('fs');
 const path = require('path');
-const id = 'mightyeagle';
-const species = "Eagle";
+const id = 'lilcat';
+const species = "Cat";
 
 const customItems = [{screen_name: "Evil?", image_name: null, id: "evil"},
-  {screen_name: "Bowler Hat", image_name: "bowler-hat.png", id: "bowler-hat"},
-  {screen_name: "Monocle", image_name: "monocle.png", id: "monocle"},];
+  {screen_name: "Horns", image_name: "horns.png", id: "horns"},
+  {screen_name: "Wings", image_name: "wings.png", id: "wings"},];
 
 function CreateImage(options){
   //If no options provided, just return the image
@@ -17,13 +17,13 @@ function CreateImage(options){
   var im = require('imagemagick');
 
   let allOptions = [];
-  if(options.includes('monocle') ){
-    const monoclePath = path.join(__dirname, `monocle.png`);
-    allOptions.push.apply(allOptions, [monoclePath, '-gravity', 'Center', '-geometry', '2000x2000-500+100', '-composite'])
+  if(options.includes('wings') ){
+    const wingsPath = path.join(__dirname, `wings.png`);
+    allOptions.push.apply(allOptions, [wingsPath, '-gravity', 'Center', '-geometry', '2000x2000+30+5', '-composite'])
   }
-  if(options.includes('bowler-hat') ){
-    const bowlerPath = path.join(__dirname, `bowler-hat.png`);
-    allOptions.push.apply(allOptions, [bowlerPath, '-gravity', 'Center', '-geometry', '2000x2000-500-1200', '-composite'])
+  if(options.includes('horns') ){
+    const hornsPath = path.join(__dirname, `horns.png`);
+    allOptions.push.apply(allOptions, [hornsPath, '-gravity', 'Center', '-geometry', '2000x2000+30+1000', '-composite'])
   }
 
   const directoryPath = path.join(__dirname, `image.png`);
