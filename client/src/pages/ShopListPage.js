@@ -1,7 +1,6 @@
 import Navigation from "../components/Navigation";
-import PetBox from "../components/PetBox";
 import ShopsList from "../components/ShopsList";
-import React, { useEffect, useState, useContext, Component } from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import CheckUserLoggedIn from "../components/CheckUserLoggedIn";
 import user from "../data_access_layer/user";
@@ -22,7 +21,6 @@ function ShopListPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(currentUserID);
       if (currentUserID) {
         const { data } = await user.GetUser(currentUserID);
         setCurrentUser(data);

@@ -227,7 +227,7 @@ router.patch('/AddToInv/:gid/:iid',async (req,res)=>{
       if(user.money<item.price){
         return res.status(400).json({message:'Not enough money'});
       }else{
-        await mongodb_DAL.users.addItem(gid,iid);
+        await mongodb_DAL.users.addItemById(gid,iid);
       }
     }catch(error){
       return res.status(400).json({message : `Unable to complete transaction`});
