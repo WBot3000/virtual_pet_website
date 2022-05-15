@@ -57,12 +57,12 @@ function Search() {
           style={{ minHeight: "80vh" }}
         >
           <Typography variant="h2">Search Pets</Typography>
+          <label for="searchbar"></label>
           <TextField
-            label="Search"
             InputProps={{
               endAdornment: (
                 <InputAdornment>
-                  <IconButton onClick={submitSearch}>
+                  <IconButton id="searchbar" onClick={submitSearch}>
                     <SearchIcon />
                   </IconButton>
                 </InputAdornment>
